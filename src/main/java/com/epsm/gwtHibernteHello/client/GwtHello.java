@@ -1,6 +1,6 @@
-package com.epsm.client;
+package com.epsm.gwtHibernteHello.client;
 
-import com.epsm.shared.FieldVerifier;
+import com.epsm.gwtHibernteHello.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

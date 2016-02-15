@@ -1,6 +1,6 @@
-package com.epsm.client;
+package com.epsm.gwtHibernteHello.client;
 
-import com.epsm.shared.FieldVerifier;
+import com.epsm.gwtHibernteHello.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,7 +22,7 @@ public class GwtTestGwtHello extends GWTTestCase {
    * Must refer to a valid module that sources this class.
    */
   public String getModuleName() {
-    return "com.epsm.GwtHelloJUnit";
+    return "com.epsm.gwtHibernteHello.GwtHelloJUnit";
   }
 
   /**

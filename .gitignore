@@ -6,6 +6,10 @@ logs/
 tsrget/
 .settings/
 .metadata/
+gwt-unitCache/
+war/
+www-test/
+src/main/webapp/META-INF/
 .classpath
 .project
 *.class

@@ -1,7 +1,7 @@
-package com.epsm.server;
+package com.epsm.gwtHibernteHello.server;
 
-import com.epsm.client.GreetingService;
-import com.epsm.shared.FieldVerifier;
+import com.epsm.gwtHibernteHello.client.GreetingService;
+import com.epsm.gwtHibernteHello.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

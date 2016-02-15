@@ -1,4 +1,4 @@
-package com.epsm.client;
+package com.epsm.gwtHibernteHello.client;
 
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   

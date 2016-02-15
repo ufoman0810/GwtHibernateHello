@@ -1,4 +1,4 @@
-package com.epsm.shared;
+package com.epsm.gwtHibernteHello.shared;
 
 /**
  * <p>
