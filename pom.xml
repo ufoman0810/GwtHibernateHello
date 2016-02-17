@@ -6,10 +6,9 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.epsm</groupId>
-  <artifactId>hl</artifactId>
+  <artifactId>gwt-hibernate-hello</artifactId>
   <packaging>war</packaging>
   <version>1.0</version>
-  <name>GWT Maven Archetype</name>
 
   <properties>
     <!-- Convenience property to set the GWT version -->
@@ -82,7 +81,7 @@
         <configuration>
           <runTarget>application.html</runTarget>
           <modules>
-            <module>com.epsm.gwtHibernteHello.GwtHello</module>
+            <module>com.epsm.gwtHibernteHello.GwtHibernateHello</module>
           </modules>
         </configuration>
       </plugin>

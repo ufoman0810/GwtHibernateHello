@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='GwtHello'>
+<module rename-to='GwtHibernateHello'>
 	<inherits name='com.google.gwt.user.User'/>            
 	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
 	<inherits name='com.google.gwt.uibinder.UiBinder'/>
 	<inherits name="com.google.gwt.logging.Logging"/>
               
-	<entry-point class='com.epsm.gwtHibernteHello.client.GwtHello'/>
+	<entry-point class='com.epsm.gwtHibernteHello.client.GwtHibernateHello'/>
 	
 	<source path='client'/>
 	<source path='shared'/>
 	
 	<set-property name="gwt.logging.enabled" value="TRUE"/> 
-	<set-property name="gwt.logging.logLevel" value="FINE"/>
+	<set-property name="gwt.logging.logLevel" value="FINEST"/>
     <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
 </module>
