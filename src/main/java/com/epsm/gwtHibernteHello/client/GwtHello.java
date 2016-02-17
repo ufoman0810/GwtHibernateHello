@@ -4,6 +4,7 @@ import com.epsm.gwtHibernteHello.client.page.login.Login;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class GwtHello implements EntryPoint {
@@ -34,6 +35,6 @@ public class GwtHello implements EntryPoint {
 	}
 	
 	private void displayLoginPage(){
-		RootPanel.get().add(new Login());
+		RootLayoutPanel.get().add(new Login());
 	}
 }

@@ -2,6 +2,7 @@ package com.epsm.gwtHibernteHello.client.page.login;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 
 public interface LoginResources extends ClientBundle {
 	public interface MyCss extends CssResource {
@@ -15,4 +16,7 @@ public interface LoginResources extends ClientBundle {
 
 	@Source("Login.css")
 	MyCss style();
+	
+	@Source("logo.png")
+	ImageResource logo();
 }
