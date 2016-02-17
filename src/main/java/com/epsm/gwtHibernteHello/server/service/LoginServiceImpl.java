@@ -1,6 +1,6 @@
-package com.epsm.gwtHibernteHello.server;
+package com.epsm.gwtHibernteHello.server.service;
 
-import com.epsm.gwtHibernteHello.client.LoginService;
+import com.epsm.gwtHibernteHello.client.service.LoginService;
 import com.epsm.gwtHibernteHello.shared.UserDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

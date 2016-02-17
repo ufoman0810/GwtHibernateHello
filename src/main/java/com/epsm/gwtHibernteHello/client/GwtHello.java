@@ -1,11 +1,12 @@
 package com.epsm.gwtHibernteHello.client;
 
-import com.epsm.gwtHibernteHello.client.page.login.Login;
+import com.epsm.gwtHibernteHello.client.page.Login;
+import com.epsm.gwtHibernteHello.client.service.LoginService;
+import com.epsm.gwtHibernteHello.client.service.LoginServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 
 public class GwtHello implements EntryPoint {
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);

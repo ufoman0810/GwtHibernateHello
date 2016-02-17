@@ -1,0 +1,23 @@
+.general{
+	min-width: 400px;
+	min-height: 400px;
+}
+	      
+.header {
+	border-bottom: 1px solid black;
+}
+        
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	float: left;
+	margin-left: -170px;
+	margin-top: -40px;
+}
+        
+.footer {
+	text-align: center;
+	border-top: 1px solid black;
+}

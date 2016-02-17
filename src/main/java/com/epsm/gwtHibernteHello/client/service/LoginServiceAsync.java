@@ -1,4 +1,4 @@
-package com.epsm.gwtHibernteHello.client;
+package com.epsm.gwtHibernteHello.client.service;
 
 import com.epsm.gwtHibernteHello.shared.UserDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
