@@ -1,10 +1,10 @@
-package com.epsm.gwtHibernteHello.client;
+package com.epsm.gwtHibernateHello.client;
 
 import java.util.logging.Logger;
 
-import com.epsm.gwtHibernteHello.client.page.Page;
-import com.epsm.gwtHibernteHello.client.service.LoginService;
-import com.epsm.gwtHibernteHello.client.service.LoginServiceAsync;
+import com.epsm.gwtHibernateHello.client.page.Page;
+import com.epsm.gwtHibernateHello.client.service.LoginService;
+import com.epsm.gwtHibernateHello.client.service.LoginServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;

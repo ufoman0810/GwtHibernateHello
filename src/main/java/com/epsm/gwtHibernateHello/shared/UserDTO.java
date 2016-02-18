@@ -1,4 +1,4 @@
-package com.epsm.gwtHibernteHello.shared;
+package com.epsm.gwtHibernateHello.shared;
 
 import java.io.Serializable;
 

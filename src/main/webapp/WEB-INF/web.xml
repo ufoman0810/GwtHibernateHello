@@ -6,7 +6,7 @@
 <web-app>
 	<servlet>
 		<servlet-name>loginServlet</servlet-name>
-		<servlet-class>com.epsm.gwtHibernteHello.server.service.LoginServiceImpl</servlet-class>
+		<servlet-class>com.epsm.gwtHibernateHello.server.service.LoginServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

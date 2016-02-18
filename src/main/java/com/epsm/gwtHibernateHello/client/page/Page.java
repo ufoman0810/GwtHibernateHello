@@ -1,4 +1,4 @@
-package com.epsm.gwtHibernteHello.client.page;
+package com.epsm.gwtHibernateHello.client.page;
 
 import java.util.logging.Logger;
 

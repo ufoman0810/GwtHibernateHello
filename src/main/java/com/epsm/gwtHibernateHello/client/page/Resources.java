@@ -1,4 +1,4 @@
-package com.epsm.gwtHibernteHello.client.page;
+package com.epsm.gwtHibernateHello.client.page;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;

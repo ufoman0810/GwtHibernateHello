@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="GwtHibernateHello">
   <!-- Inherit our applications main module.                      -->
-  <inherits name='com.epsm.gwtHibernteHello.GwtHibernateHello' />
+  <inherits name='com.epsm.gwtHibernateHello.GwtHibernateHello' />
 
   <!-- Specify the path to any remote services.                   -->
   <servlet path="/GwtHibernateHello/greet" class="com.epsm.gwtHibernteHello.server.GreetingServiceImpl" />

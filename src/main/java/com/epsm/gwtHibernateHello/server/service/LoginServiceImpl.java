@@ -1,7 +1,7 @@
-package com.epsm.gwtHibernteHello.server.service;
+package com.epsm.gwtHibernateHello.server.service;
 
-import com.epsm.gwtHibernteHello.client.service.LoginService;
-import com.epsm.gwtHibernteHello.shared.UserDTO;
+import com.epsm.gwtHibernateHello.client.service.LoginService;
+import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")

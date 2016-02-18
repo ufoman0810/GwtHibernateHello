@@ -1,6 +1,6 @@
-package com.epsm.gwtHibernteHello.client.service;
+package com.epsm.gwtHibernateHello.client.service;
 
-import com.epsm.gwtHibernteHello.shared.UserDTO;
+import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
