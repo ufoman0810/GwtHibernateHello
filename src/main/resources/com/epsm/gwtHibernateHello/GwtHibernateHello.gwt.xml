@@ -4,7 +4,6 @@
 	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
 	<inherits name='com.google.gwt.uibinder.UiBinder'/>
 	<inherits name="com.google.gwt.logging.Logging"/>
-	<inherits name="com.google.gwt.i18n.I18N"/>
               
 	<entry-point class='com.epsm.gwtHibernateHello.client.GwtHibernateHello'/>
 	
@@ -15,8 +14,5 @@
 	<set-property name="gwt.logging.logLevel" value="FINEST"/>
     <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
     
-	<extend-property name="locale" values="en"/>
-	<extend-property name="locale" values="ru"/>
-	<set-property name="locale" value="en,ru"/>
-	<set-property-fallback name="locale" value="en"/>
+    <set-property name="user.agent" value="gecko1_8"/>
 </module>

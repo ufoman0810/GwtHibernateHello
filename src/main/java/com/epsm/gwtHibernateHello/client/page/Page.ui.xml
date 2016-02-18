@@ -1,9 +1,6 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:gwt="urn:import:com.google.gwt.user.client.ui" 
-	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources"
-	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-    ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
-    ui:generateLocales="default">
+	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources">
 	<ui:with type="com.epsm.gwtHibernateHello.client.page.Resources" field="resources"/>
 	<ui:style src="css/Page.css"/>
 
@@ -18,9 +15,7 @@
 				</div>
 				<div class="{style.inputContainer}">
 					<div class="{style.labelsContainer}">
-						<gwt:Label resources:styleName="{style.label}">
-							<ui:msg description="login">Login:</ui:msg>
-						</gwt:Label>
+						<gwt:Label text="Login:" resources:styleName="{style.label}"/>
 						<gwt:Label text="Password:" resources:styleName="{style.label}"/>
 					</div>     
 					<div class="{style.fields}">     
