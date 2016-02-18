@@ -81,7 +81,7 @@
         <configuration>
           <runTarget>application.html</runTarget>
           <modules>
-            <module>com.epsm.gwtHibernteHello.GwtHibernateHello</module>
+            <module>com.epsm.gwtHibernateHello.GwtHibernateHello</module>
           </modules>
         </configuration>
       </plugin>
