@@ -9,25 +9,33 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public UserDTO loginServer(String name, String password) {
-		System.out.println("here_1");
-		
+		if(name.equals("john") && password.equals("smith")){
+			return createLogedInDTO();
+		}else{
+			return createNotLogedInDTO();
+		}
+	}
+	
+	private UserDTO createLogedInDTO(){
 		UserDTO dto = new UserDTO();
-		dto.setUserName("a");
-		dto.setSessionId("b");
+		dto.setUserName("name");
+		dto.setSessionId("846");
 		dto.setLoggedIn(true);
 		
 		return dto;
 	}
-
-	@Override
-	public UserDTO loginFromSessionServer() {
-		System.out.println("here_2");
-		
+	
+	private UserDTO createNotLogedInDTO(){
 		UserDTO dto = new UserDTO();
-		dto.setUserName("a");
-		dto.setSessionId("b");
-		dto.setLoggedIn(true);
+		dto.setUserName("");
+		dto.setSessionId("");
+		dto.setLoggedIn(false);
 		
 		return dto;
+	}
+	
+	@Override
+	public UserDTO loginFromSessionServer() {
+		return createLogedInDTO();
 	}
 }

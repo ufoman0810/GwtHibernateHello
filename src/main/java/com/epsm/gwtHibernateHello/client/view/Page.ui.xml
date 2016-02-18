@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:gwt="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources">
-	<ui:with type="com.epsm.gwtHibernateHello.client.page.Resources" field="resources"/>
+	<ui:with type="com.epsm.gwtHibernateHello.client.view.Resources" field="resources"/>
 	<ui:style src="css/Page.css"/>
 
 	<gwt:HeaderPanel styleName="{style.general}">
