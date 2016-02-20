@@ -97,7 +97,12 @@ public class PagePresenter {
 		displayServerNotAvaibleMessageOnLoginFilling();
 	}
 	
+	private void hideGreetingFilling(){
+		view.hideGreetingFilling();
+	}
+	
 	private void displayLoginFilling(){
+		hideGreetingFilling();
 		eraseLoginFillingState();
 		makeViewDisplayLoginFilling();
 	}
@@ -142,8 +147,13 @@ public class PagePresenter {
 	}
 	
 	private void displayGreetUserFilling(){
+		hideLoginFilling();
 		eraseGreetingFillingState();
 		makeViewDisplayGreetingFilling();
+	}
+	
+	private void hideLoginFilling(){
+		view.hideLoginFilling();
 	}
 	
 	private void eraseGreetingFillingState(){
@@ -162,24 +172,37 @@ public class PagePresenter {
 	}
 	
 	public void logIn(String login, String password){
-		loginWithServer(login, password);
-		
-		if(loginServerNotAvaible){
-			displayServerNotAvaibleMessageOnLoginFilling();
-			logger.warning("Error: server not avaible.");
-		}else if(isUserLoggedIn()){
-			getGreetingFromServer();
-			
-			if(greetingServerNotAvaible){
-				displayServerNotAvaibleMessageOnLoginFilling();
-			}else{
-				displayGreetUserFilling();
-			}
+		if(areLoginOrPasswordTooShort(login, password)){
+			showLoginOrPasswordTooShortMessage();
 		}else{
-			displayWrongLoginOrPasswordMessage();
-			logger.fine("Displayed:login filling.");
+			loginWithServer(login, password);
+			
+			if(loginServerNotAvaible){
+				displayServerNotAvaibleMessageOnLoginFilling();
+				logger.warning("Error: server not avaible.");
+			}else if(isUserLoggedIn()){
+				getGreetingFromServer();
+				
+				if(greetingServerNotAvaible){
+					displayServerNotAvaibleMessageOnLoginFilling();
+				}else{
+					displayGreetUserFilling();
+				}
+			}else{
+				displayWrongLoginOrPasswordMessage();
+				logger.fine("Displayed:login filling.");
+			}
 		}
-	}	
+	}
+	
+	private boolean areLoginOrPasswordTooShort(String login, String password){
+		return login.length() < Constants.MINIMAL_LENGHT 
+				|| password.length() < Constants.MINIMAL_LENGHT;
+	}
+	
+	private void showLoginOrPasswordTooShortMessage(){
+		view.displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+	}
 	
 	private void loginWithServer(String login, String password){		
 		loginService.loginServer(login, password,  new AsyncCallback<UserDTO>() {

@@ -11,15 +11,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
-import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -42,12 +39,13 @@ public class PagePresenterTest {
 	private GreetingServiceAsync greetingService;
 	private PageView view;
 	private PagePresenter presenter;
-	private ArgumentCaptor<String> captor;
 	private final String USERNAME = "John";
 	private final String SESSION_ID = "someSessionId";
 	private final String GREETING = "Hello";
 	private final String LOGIN = "someLogin";
 	private final String PASSWORD = "somePassword";
+	private final String TOO_SHORT_PASSWORD = "123";
+	private final String TOO_SHORT_LOGIN = "abc";
 	
 	@Before
 	public void setUp(){
@@ -56,7 +54,6 @@ public class PagePresenterTest {
 		view = mock(PageView.class);
 		presenter = new PagePresenter(loginService, greetingService, view);
 		PowerMockito.mockStatic(Cookies.class);
-		captor = ArgumentCaptor.forClass(String.class);
 	}
 	
 	@Rule
@@ -266,10 +263,11 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void erasesLoginPasswordAndErrorFieldsBeforeDisplayLoginFilling(){
+	public void erasesErrorsAndFieldsAndHidesGreetingFillingBeforeDisplaysLoginFilling(){
 		makeShowPageMethodShowLoginFillingWithoutErrors();
 		
 		InOrder inOrder = inOrder(view);
+		inOrder.verify(view).hideGreetingFilling();
 		inOrder.verify(view).eraseLoginAndPassword();
 		inOrder.verify(view).eraseLoginFillingErrorsFields();
 		inOrder.verify(view).displayLoginFilling();
@@ -282,26 +280,14 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void erasesErrorFieldBeforeDisplayGreetingFilling(){
+	public void erasesErrorFieldAndHidesLoginFllingBeforeDisplayGreetingFilling(){
 		makeShowPageMethodShowGreetingFillingWithoutErrors();
 		
 		InOrder inOrder = inOrder(view);
+		inOrder.verify(view).hideLoginFilling();
 		inOrder.verify(view).eraseGreetingFillingErrorField();
 		inOrder.verify(view).displayGreetingFilling(anyString());
 		inOrder.verifyNoMoreInteractions();
-	}
-	
-	@Test
-	@SuppressWarnings("unchecked")
-	public void loginMethodPassesRightDataToLoginService(){
-		makeLoginServiceNotAvaibleWithLoginServerMethod();//just not to get NPE
-		presenter.logIn(LOGIN, PASSWORD);
-		
-		verify(loginService).loginServer(captor.capture(), captor.capture(), isA(AsyncCallback.class));
-		List<String> credentials = captor.getAllValues();
-		
-		Assert.assertEquals(LOGIN, credentials.get(0));
-		Assert.assertEquals(PASSWORD, credentials.get(1));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -366,6 +352,26 @@ public class PagePresenterTest {
 	}
 	
 	@Test
+	public void displaysLoginOrPasswordTooShortMessageIfLoginTooShort(){
+		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeGreetingServiceAvaible();
+		
+		presenter.logIn(TOO_SHORT_LOGIN, PASSWORD);
+		
+		verify(view).displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+	}
+	
+	@Test
+	public void displaysLoginOrPasswordTooShortMessageIfPasswordTooShort(){
+		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeGreetingServiceAvaible();
+		
+		presenter.logIn(LOGIN, TOO_SHORT_PASSWORD);
+		
+		verify(view).displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+	}
+	
+	@Test
 	public void displaysGreetingFillingWithoutErrorIfLoginAndPasswordCorrectAndGreetingServerIsAvaible(){
 		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
 		makeGreetingServiceAvaible();
@@ -395,7 +401,7 @@ public class PagePresenterTest {
 			}
 		}).when(loginService).logout(isA(AsyncCallback.class));
 	}
-	
+
 	@Test
 	public void displaysLoggingFilingWithoutErrorIfLoginServerExecutedLogoutRequest(){
 		makeLoginServiceExecuteLogoutRequest();
