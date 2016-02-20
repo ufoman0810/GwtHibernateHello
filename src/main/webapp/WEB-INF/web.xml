@@ -8,9 +8,17 @@
 		<servlet-name>loginServlet</servlet-name>
 		<servlet-class>com.epsm.gwtHibernateHello.server.service.LoginServiceImpl</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>greetingServlet</servlet-name>
+		<servlet-class>com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>loginServlet</servlet-name>
 		<url-pattern>/GwtHibernateHello/login</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>greetingServlet</servlet-name>
+		<url-pattern>/GwtHibernateHello/greeting</url-pattern>
 	</servlet-mapping>
 </web-app>

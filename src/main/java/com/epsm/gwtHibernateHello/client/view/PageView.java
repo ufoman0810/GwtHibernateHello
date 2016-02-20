@@ -7,7 +7,9 @@ public interface PageView {
 	void eraseLoginFillingErrorsFields();
 	void eraseGreetingFillingErrorField();
 	void displayPage();
+	void hideLoginFilling();
 	void displayLoginFilling();
+	void hideGreetingFilling();
 	void displayGreetingFilling(String greeting);
 	void displayLoginError(String error);
 	void displayLogoutError(String error);

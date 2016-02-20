@@ -12,7 +12,7 @@
 	<name>second test task</name>
 
 	<properties>
-		<gwtVersion>2.7.0</gwtVersion>
+		<gwt.version>2.7.0</gwt.version>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,19 +23,19 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>${gwtVersion}</version>
+			<version>${gwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>${gwtVersion}</version>
+			<version>${gwt.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-dev</artifactId>
-			<version>${gwtVersion}</version>
+			<version>${gwt.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
@@ -97,7 +97,6 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>test</goal>
 							<goal>compile</goal>
 						</goals>
 					</execution>
