@@ -9,7 +9,7 @@
 			<gwt:Image resource="{resources.logo}"/>
 		</gwt:FlowPanel>
 		<gwt:HTMLPanel>
-			<div id="login" class="{style.loginContainer}">
+			<div id="loginFilling" class="{style.loginContainer}">
 				<div class="{style.loginErrorsContainer">
 					<gwt:Label ui:field="loginErrorLabel" resources:styleName="{style.error}"/>
 				</div>
@@ -25,9 +25,9 @@
 					</div>
 				</div>
         	</div>
-        	<div id="greet" class="{style.greetContainer}">
+        	<div id="greetingFilling" class="{style.greetContainer}">
 				<div class="{style.greetLabelContainer}">
-					<gwt:Label text="greet"/>
+					<gwt:Label ui:field="greetingLabel" resources:styleName="{style.label}"/>
 				</div>  
 				<div class="{style.logoutContainer}">
 					<gwt:Label ui:field="logoutLink" resources:styleName="{style.logoutLink}" text="Logout from system"/>

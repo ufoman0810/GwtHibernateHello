@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
+import org.powermock.api.mockito.*;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -40,7 +40,7 @@ public class PagePresenterTest {
 	private PageView view;
 	private PagePresenter presenter;
 	private final String USERNAME = "John";
-	private final String SESSION_ID = "someSessionId";
+	private final String TOKEN = "someToken";
 	private final String GREETING = "Hello";
 	private final String LOGIN = "someLogin";
 	private final String PASSWORD = "somePassword";
@@ -85,21 +85,21 @@ public class PagePresenterTest {
 	
 	@Test
 	@SuppressWarnings("unchecked")
-	public void showPageMethodDoesNotTryCheckWithServerIfSessionStillLegalIfThereIsNotSessionIdInCookies(){
-		makeSessionIdNotExistInCookies();
+	public void showPageMethodDoesNotTryCheckWithServerIfTokenStillLegalIfThereIsNoInCookies(){
+		makeTokenNotExistInCookies();
 		
 		presenter.showPage();
 		
-		verify(loginService, never()).isSessionIdStillLegal(isA(AsyncCallback.class));
+		verify(loginService, never()).isTokenStillLegal(eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
-	private void makeSessionIdNotExistInCookies(){
-		when(Cookies.getCookie(Constants.COOKIE_SESSION_ID)).thenReturn(null);
+	private void makeTokenNotExistInCookies(){
+		when(Cookies.getCookie(Constants.COOKIE_TOKEN_NAME)).thenReturn(null);
 	}
 	
 	@Test
-	public void displaysLoginFillingWithoutErrorIfSessionIdNotExistsInCookies(){
-		makeSessionIdNotExistInCookies();
+	public void displaysLoginFillingWithoutErrorIfTokenNotExistsInCookies(){
+		makeTokenNotExistInCookies();
 		
 		presenter.showPage();
 		
@@ -108,8 +108,8 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void displaysLoginFillingWithoutErrorIfSessionIsNotLegalOnLoginServer(){
-		makeSessionNotLegalOnLoginServer();
+	public void displaysLoginFillingWithoutErrorIfTokenNotLegalOnLoginServer(){
+		makeTokenNotLegalOnLoginServer();
 		
 		presenter.showPage();
 		
@@ -117,24 +117,24 @@ public class PagePresenterTest {
 		verify(view, never()).displayLoginError(anyString());
 	}
 	
-	private void makeSessionNotLegalOnLoginServer(){
-		makeSessionIdExistInCookies();
-		makeLoginServerReturnNotLoggedInUserDTOWithCheckWithServerIsSessionIdStillLegalMethod();
+	private void makeTokenNotLegalOnLoginServer(){
+		makeTokenExistInCookies();
+		makeLoginServerReturnNotLoggedInUserDTOWithCheckWithServerIsTokenStillLegalMethod();
 	}
 	
-	private void makeSessionIdExistInCookies(){
-		when(Cookies.getCookie(Constants.COOKIE_SESSION_ID)).thenReturn(SESSION_ID);
+	private void makeTokenExistInCookies(){
+		when(Cookies.getCookie(Constants.COOKIE_TOKEN_NAME)).thenReturn(TOKEN);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void makeLoginServerReturnNotLoggedInUserDTOWithCheckWithServerIsSessionIdStillLegalMethod(){
+	private void makeLoginServerReturnNotLoggedInUserDTOWithCheckWithServerIsTokenStillLegalMethod(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
-				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[0];
+				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[1];
 				callback.onSuccess(makeNotLoggedInUserDTO());
 				return null;
 			}
-		}).when(loginService).isSessionIdStillLegal(isA(AsyncCallback.class));
+		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	private UserDTO makeNotLoggedInUserDTO(){
@@ -155,24 +155,24 @@ public class PagePresenterTest {
 	}
 	
 	private void makeLoginServerNotAvaible(){
-		makeSessionIdExistInCookies();
-		makeLoginServerNotAvaibleWithLoginFromSessionServerMethod();
+		makeTokenExistInCookies();
+		makeLoginServerNotAvaibleWithIsTokenStillLegalMethod();
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void makeLoginServerNotAvaibleWithLoginFromSessionServerMethod(){
+	private void makeLoginServerNotAvaibleWithIsTokenStillLegalMethod(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
-				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[0];
+				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[1];
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(loginService).isSessionIdStillLegal(isA(AsyncCallback.class));
+		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	@Test
-	public void displaysLoginFillingWithServerErrorIfSessionIsActiveButGreetingServiceIsNotAvaible(){
-		makeSessionActiveOnLoginServerWithLoginFromSessionMethod();
+	public void displaysLoginFillingWithServerErrorIfTokenIsLegalButGreetingServiceIsNotAvaible(){
+		makeTokenLegalOnLoginServerWithIsTokenStillLegalMethod();
 		makeGreetingServiceNotAvaible();
 		
 		presenter.showPage();
@@ -181,27 +181,26 @@ public class PagePresenterTest {
 		verify(view).displayLoginError(Constants.SERVER_NOT_AVAIBLE);
 	}
 	
-	private void makeSessionActiveOnLoginServerWithLoginFromSessionMethod(){
-		makeSessionIdExistInCookies();
-		makeLoginServerReturnLoggedInUserDTOWithCheckWithServerIsSessionIdStillLegalMethod();
+	private void makeTokenLegalOnLoginServerWithIsTokenStillLegalMethod(){
+		makeTokenExistInCookies();
+		makeLoginServerReturnLoggedInUserDTOWithCheckWithIsTokenStillLegalMethod();
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void makeLoginServerReturnLoggedInUserDTOWithCheckWithServerIsSessionIdStillLegalMethod(){
+	private void makeLoginServerReturnLoggedInUserDTOWithCheckWithIsTokenStillLegalMethod(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
-				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[0];
+				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[1];
 				callback.onSuccess(makeLoggedInUserDTO());
 				return null;
 			}
-		}).when(loginService).isSessionIdStillLegal(isA(AsyncCallback.class));
+		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	private UserDTO makeLoggedInUserDTO(){
 		UserDTO user = new UserDTO();
 		user.setUserName(USERNAME);
-		user.setUserGreeting(GREETING);
-		user.setSessionId(SESSION_ID);
+		user.setToken(TOKEN);
 		user.setLoggedIn(true);
 		
 		return user;
@@ -215,12 +214,12 @@ public class PagePresenterTest {
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(SESSION_ID), isA(AsyncCallback.class));
+		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
-	public void displaysGreetingFillingIfSessionLegalOnServerAndGreetingServerAvaible(){
-		makeSessionActiveOnLoginServerWithLoginFromSessionMethod();
+	public void displaysGreetingFillingIfTokenLegalOnServerAndGreetingServerAvaible(){
+		makeTokenLegalOnLoginServerWithIsTokenStillLegalMethod();
 		makeGreetingServiceAvaible();
 		
 		presenter.showPage();
@@ -236,21 +235,21 @@ public class PagePresenterTest {
 				callback.onSuccess(GREETING);
 				return null;
 			}
-		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(SESSION_ID), isA(AsyncCallback.class));
+		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
 	public void createsExpectedUserGreeting(){
 		String expectedGreeting = GREETING + ", " + USERNAME + ".";
 		
-		makeShowPageMethodShowGreetingFillingWithoutErrors();
+		makeShowPageMethodDisplayGreetingFillingWithoutErrors();
 		
 		verify(view).displayGreetingFilling(expectedGreeting);
 	}
 	
-	private void makeShowPageMethodShowGreetingFillingWithoutErrors(){
-		makeSessionIdExistInCookies();
-		makeLoginServerReturnLoggedInUserDTOWithCheckWithServerIsSessionIdStillLegalMethod();
+	private void makeShowPageMethodDisplayGreetingFillingWithoutErrors(){
+		makeTokenExistInCookies();
+		makeLoginServerReturnLoggedInUserDTOWithCheckWithIsTokenStillLegalMethod();
 		makeGreetingServiceAvaible();
 		presenter.showPage();
 	}
@@ -275,13 +274,13 @@ public class PagePresenterTest {
 	}
 	
 	private void makeShowPageMethodShowLoginFillingWithoutErrors(){
-		makeSessionIdNotExistInCookies();
+		makeTokenNotExistInCookies();
 		presenter.showPage();
 	}
 	
 	@Test
 	public void erasesErrorFieldAndHidesLoginFllingBeforeDisplayGreetingFilling(){
-		makeShowPageMethodShowGreetingFillingWithoutErrors();
+		makeShowPageMethodDisplayGreetingFillingWithoutErrors();
 		
 		InOrder inOrder = inOrder(view);
 		inOrder.verify(view).hideLoginFilling();
@@ -395,11 +394,11 @@ public class PagePresenterTest {
 	private void makeLoginServiceUnavaibleForExecuteLogoutMethod(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
-				AsyncCallback<Void> callback = (AsyncCallback<Void>) invocation.getArguments()[0];
+				AsyncCallback<Void> callback = (AsyncCallback<Void>) invocation.getArguments()[1];
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(loginService).logout(isA(AsyncCallback.class));
+		}).when(loginService).logout(anyString(), isA(AsyncCallback.class));
 	}
 
 	@Test
@@ -416,10 +415,43 @@ public class PagePresenterTest {
 	private void makeLoginServiceExecuteLogoutRequest(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
-				AsyncCallback<Void> callback = (AsyncCallback<Void>) invocation.getArguments()[0];
+				AsyncCallback<Void> callback = (AsyncCallback<Void>) invocation.getArguments()[1];
 				callback.onSuccess(null);
 				return null;
 			}
-		}).when(loginService).logout(isA(AsyncCallback.class));
+		}).when(loginService).logout(anyString(), isA(AsyncCallback.class));
+	}
+	
+	@Test
+	public void refreshesCookieAfterSuccessfullLogin(){
+		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		
+		presenter.logIn(LOGIN, PASSWORD);
+		
+		PowerMockito.verifyStatic();
+		Cookies.setCookie(eq(Constants.COOKIE_TOKEN_NAME), eq(TOKEN), isA(Date.class));
+	}
+	
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void storesTokenAfterSuccessfullLoginAndUseItWhereCallsGetGreetingForTime(){
+		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		
+		presenter.logIn(LOGIN, PASSWORD);
+		
+		verify(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN),
+				isA(AsyncCallback.class));
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void storesTokenAfterSuccessfullLoginAndUseItWhereCallsLogout(){
+		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		
+		presenter.logIn(LOGIN, PASSWORD);
+		presenter.executeLogout();
+		
+		verify(loginService).logout(eq(TOKEN), isA(AsyncCallback.class));
 	}
 }

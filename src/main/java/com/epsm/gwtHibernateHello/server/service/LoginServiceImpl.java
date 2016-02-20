@@ -12,7 +12,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public UserDTO loginServer(String login, String password) {
-		if(login.equals("john") && password.equals("smith")){
+		if(login.equals("1111") && password.equals("1111")){
 			return createLogedInDTO();
 		}else{
 			return createNotLogedInDTO();
@@ -22,7 +22,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	private UserDTO createLogedInDTO(){
 		UserDTO dto = new UserDTO();
 		dto.setUserName("name");
-		dto.setSessionId("846");
+		dto.setToken("846");
 		dto.setLoggedIn(true);
 		
 		return dto;
@@ -31,21 +31,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	private UserDTO createNotLogedInDTO(){
 		UserDTO dto = new UserDTO();
 		dto.setUserName("");
-		dto.setSessionId("");
+		dto.setToken("");
 		dto.setLoggedIn(false);
 		
 		return dto;
 	}
 	
 	@Override
-	public UserDTO isSessionIdStillLegal(String clientSessionId){
-		String realSessionId = getRealSessionId();
-		
-		if(clientSessionId.equals(realSessionId)){
-			return createLogedInDTO();
-		}else{
-			return createNotLogedInDTO();
-		}
+	public UserDTO isTokenStillLegal(String sessionId){
+		return createLogedInDTO();
 	}
 	
 	private String getRealSessionId(){
@@ -53,5 +47,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		HttpSession session = request.getSession();
 		
 		return session.getId();
+	}
+
+	@Override
+	public void logout(String sessionId) {
+		// TODO Auto-generated method stub
+		
 	}
 }

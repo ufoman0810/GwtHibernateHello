@@ -9,7 +9,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
 	@Override
-	public String getGreetingForTime(Date timeSource) {
+	public String getGreetingForTime(Date timeSource, String sessionID) {
 		return "good time";
 	}
 }

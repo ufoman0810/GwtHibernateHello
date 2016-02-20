@@ -7,6 +7,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("login")
 public interface LoginService extends RemoteService{
 	UserDTO loginServer(String name, String password);
-	UserDTO isSessionIdStillLegal();
-	void logout();
+	UserDTO isTokenStillLegal(String sessionId);
+	void logout(String sessionId);
 }

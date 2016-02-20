@@ -1,7 +1,6 @@
 package com.epsm.gwtHibernateHello.client.view;
 
-import java.util.logging.Logger;
-
+import com.epsm.gwtHibernateHello.client.presenter.PagePresenter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,15 +11,13 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Page extends Composite {
+public class Page extends Composite implements PageView{
 	private static LoginUiBinder uiBinder = GWT.create(LoginUiBinder.class);
-	private int loginLenght;
-	private int passwordLenght;
-	private final int MIN_LENGHT = 4;
-	private static Logger logger = Logger.getLogger("Page");
+	private PagePresenter presenter;
 	   
 	@UiTemplate("Page.ui.xml")
 	interface LoginUiBinder extends UiBinder<Widget, Page> {
@@ -36,6 +33,9 @@ public class Page extends Composite {
 	TextBox passwordBox;
 	
 	@UiField
+	Label greetingLabel;
+	
+	@UiField
 	Label logoutLink;
 
 	@UiField
@@ -49,107 +49,75 @@ public class Page extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiHandler("buttonLogin")
-	void doClickLogin(ClickEvent event) {
-		logger.fine("Pressed: login button.");
-		
-		if (areLoginOrPasswordTooShort()) {
-			showTooShortErrorMessage();
-		}else{
-			if(tryToLoginOnServer()){
-				displayGreetUserFilling();
-			}else{
-				showWrongCredentialsMessage();
-			}
-		}
-	}
-	
-	private boolean areLoginOrPasswordTooShort(){
-		getLoginAndPasswordLenghts();
-		boolean tooShort = areLenghtsShorterThanMin();
-		logger.finest("Invoked: areLoginOrPasswordTooShort() method, returned '" + tooShort + "'.");
-		
-		return tooShort;
-	}
-	
-	private void getLoginAndPasswordLenghts(){
-		loginLenght = loginBox.getText().length();
-		passwordLenght = passwordBox.getText().length();
-	}
-	
-	private boolean areLenghtsShorterThanMin(){
-		boolean shorter = loginLenght < MIN_LENGHT || passwordLenght < MIN_LENGHT;
-		logger.finest("Invoked: areLenghtsShorterThanMin() method, "
-				+ "min value = '" + MIN_LENGHT + "', "
-				+ "login lenght =  '" + loginLenght + "', "
-				+ "password lenght = '" + passwordLenght + "', "
-				+ "returned '" + shorter + "'.");
-		
-		return shorter;
-	}
-	
-	private void showTooShortErrorMessage(){
-		String errorMessage = "Login or password can't be shorter than " + MIN_LENGHT + " chars.";
-		loginErrorLabel.setText(errorMessage);
-		logger.fine("Message: + " + errorMessage + ".");
-	}
-	
-	public void displayLoginFilling(){
-		clearLoginFillingFields();
-		makeGreetDivInvisible();
-		makeLoginDivVisible();
-		logger.fine("Displayed: login filling.");
-	}
-	
-	private void clearLoginFillingFields(){
+	@Override
+	public void eraseLoginAndPassword() {
 		loginBox.setText("");
 		passwordBox.setText("");
+	}
+
+	@Override
+	public void eraseLoginFillingErrorsFields() {
 		loginErrorLabel.setText("");
 	}
-	
-	private void makeGreetDivInvisible(){
-		DOM.getElementById("greet").getStyle().setDisplay(Display.NONE);
-	}
-	
-	private void makeLoginDivVisible(){
-		DOM.getElementById("login").getStyle().setDisplay(Display.BLOCK);
-	}
-	
-	private boolean tryToLoginOnServer(){
-		boolean logedIn = true;
-		logger.fine("Invoked: tryToLoginOnServer() method, returned '" + logedIn + "'.");
-		
-		return logedIn;
-	}
-	
-	public void displayGreetUserFilling(){
-		clearGreetFillingErrorField();
-		makeLoginDivInvisible();
-		makeGreetDivVisible();
-		logger.fine("Displayed: greet user filling.");
-	}
-	
-	private void clearGreetFillingErrorField(){
+
+	@Override
+	public void eraseGreetingFillingErrorField() {
 		logoutErrorLabel.setText("");
 	}
-	
-	private void makeLoginDivInvisible(){
-		DOM.getElementById("login").getStyle().setDisplay(Display.NONE);
+
+	public void displayPage(){
+		RootLayoutPanel.get().add(this);
 	}
 	
-	private void makeGreetDivVisible(){
-		DOM.getElementById("greet").getStyle().setDisplay(Display.BLOCK);
+	@Override
+	public void hideLoginFilling() {
+		DOM.getElementById("loginFilling").getStyle().setDisplay(Display.NONE);
 	}
 	
-	private void showWrongCredentialsMessage(){
-		String errorMessage = "Wrong login or password.";
-		loginErrorLabel.setText(errorMessage);
-		logger.fine("Message: + " + errorMessage + ".");
+	@Override
+	public void displayLoginFilling() {
+		DOM.getElementById("loginFilling").getStyle().setDisplay(Display.BLOCK);
+	}
+
+	@Override
+	public void hideGreetingFilling() {
+		DOM.getElementById("greetingFilling").getStyle().setDisplay(Display.NONE);
+	}
+	
+	@Override
+	public void displayGreetingFilling(String greeting) {
+		greetingLabel.setText(greeting);
+		DOM.getElementById("greetingFilling").getStyle().setDisplay(Display.BLOCK);
+	}
+
+	@Override
+	public void displayLoginError(String error) {
+		loginErrorLabel.setText(error);
+	}
+
+	@Override
+	public void displayLogoutError(String error) {
+		logoutErrorLabel.setText(error);
+	}
+
+	@Override
+	public void setPresenter(PagePresenter presenter) {
+		this.presenter = presenter;
+	}
+	
+	@UiHandler("buttonLogin")
+	void doClickLogin(ClickEvent event) {
+		loginWithPresenter();
+	}
+	
+	private void loginWithPresenter(){
+		String login = loginBox.getText();
+		String password = passwordBox.getText();
+		presenter.logIn(login, password);
 	}
 	
 	@UiHandler("logoutLink")
 	void doClick(ClickEvent event) {
-		logger.fine("Pressed: logout link.");
-		displayLoginFilling();
+		presenter.executeLogout();
 	}
 }

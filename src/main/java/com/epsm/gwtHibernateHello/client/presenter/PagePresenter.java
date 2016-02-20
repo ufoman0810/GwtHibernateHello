@@ -15,53 +15,42 @@ public class PagePresenter {
 	private LoginServiceAsync loginService;
 	private GreetingServiceAsync greetingService;
 	private PageView view;
-	private String sessionId;
-	private UserDTO user;
-	private String greeting;
-	private boolean loginServerNotAvaible;
-	private boolean greetingServerNotAvaible;
+	private String userName;
+	private String token;
+	private String userGreeting;
 	private static Logger logger = Logger.getLogger("PagePresenter");
 	
 	public PagePresenter(LoginServiceAsync loginService, GreetingServiceAsync greetingService,
 			PageView view){
 		
 		if(loginService == null){
-			throw new IllegalArgumentException("Constructor: loginService can't be null.");
+			String message = "Constructor: loginService can't be null.";
+			logger.severe(message);
+			throw new IllegalArgumentException(message);
 		}else if(greetingService == null){
-			throw new IllegalArgumentException("Constructor: greetingService can't be null.");
+			String message = "Constructor: greetingService can't be null.";
+			logger.severe(message);
+			throw new IllegalArgumentException(message);
 		}else if(view == null){
-			throw new IllegalArgumentException("Constructor: view can't be null.");
+			String message = "Constructor: view can't be null.";
+			logger.severe(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		this.loginService = loginService;
 		this.greetingService = greetingService;
 		this.view = view;
+		logger.config("PagePresenter created.");
 	}
 	
 	public void showPage(){
+		logger.fine("Invoked: showPage() method.");
 		displayPage();
 		
-		if(isSessionIdExistInCookie()){
-			checkWithServerIsSessionIdStillLegal();
-			
-			if(loginServerNotAvaible){
-				displayLoginFillingWithServerNotAvaibleMessage();
-				logger.warning("Error: server not avaible.");
-			}else if(isUserLoggedIn()){
-				getGreetingFromServer();
-				
-				if(greetingServerNotAvaible){
-					displayLoginFillingWithServerNotAvaibleMessage();
-				}else{
-					displayGreetUserFilling();
-				}
-			}else{
-				displayLoginFilling();
-				logger.fine("Displayed:login filling.");
-			}
+		if(isTokenExistInCookies()){
+			checkWithServerIsTokenStillLegal();
 		}else{
 			displayLoginFilling();
-			return;
 		}
 	}
 	
@@ -69,27 +58,93 @@ public class PagePresenter {
 		view.displayPage();
 	}
 	
-	private boolean isSessionIdExistInCookie(){
-		sessionId = Cookies.getCookie(Constants.COOKIE_SESSION_ID);
-		logger.fine("Invoked: getSessionIdFromCookies() method, sessionId = '" + sessionId + "'.");
+	private boolean isTokenExistInCookies(){
+		boolean exist = Cookies.getCookie(Constants.COOKIE_TOKEN_NAME) != null;
+		logger.finer("Invoked: isTokenExistInCookies(), returned '" + exist + "'." );
 		
-		return sessionId != null;
+		return exist;
 	}
 	
-	private void checkWithServerIsSessionIdStillLegal(){		
-		loginService.isSessionIdStillLegal(new AsyncCallback<UserDTO>() {
-			
-			@Override
-			public void onSuccess(UserDTO result) {
-				user = result;
-				loginServerNotAvaible = false;
+	private void checkWithServerIsTokenStillLegal(){		
+		loginService.isTokenStillLegal(token, new TokenLegalityRequest());
+	}
+	
+	private class TokenLegalityRequest implements AsyncCallback<UserDTO>{
+
+		@Override
+		public void onSuccess(UserDTO result) {
+			logger.finer("Invoked: loginserver.isTokenStillLegal(), returned '" + result + "'." );
+			if(isUserLoggedIn(result)){
+				saveUserData(result);
+				tryToGetGreetingFromGreetingServer();
+			}else{
+				displayLoginFilling();
 			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				loginServerNotAvaible = true;
-			}
-		});
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			logger.warning("Invoked: loginserver.isTokenStillLegal(), server unavaible.");
+			displayLoginFillingWithServerNotAvaibleMessage();
+		}
+	}
+	
+	private boolean isUserLoggedIn(UserDTO user){
+		return user.isLoggedIn();
+	}
+	
+	private void saveUserData(UserDTO user){
+		token = user.getToken();
+		userName = user.getUserName();
+	}
+	
+	private void tryToGetGreetingFromGreetingServer(){
+		Date timeSource = getCurrentDate();
+		greetingService.getGreetingForTime(timeSource, token, new GetGreetingRequest());
+	}
+	
+	private Date getCurrentDate(){
+		return new Date();
+	}
+	
+	private class GetGreetingRequest implements AsyncCallback<String>{
+		
+		@Override
+		public void onSuccess(String result) {
+			logger.finer("Invoked: greetingService.getGreetingForTime(...), returned '" + result + "'.");
+			createGreeting(result);
+			displayGreetUserFilling();
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			logger.warning("Invoked: greetingService.getGreetingForTime(...), server unavaible.");
+			displayLoginFillingWithServerNotAvaibleMessage();
+		}
+	}
+	
+	private void createGreeting(String greeting){
+		userGreeting = greeting + ", " + userName + ".";
+		logger.finest("Invoked: createGreeting(), created '" + userGreeting + "'.");
+	}
+	
+	private void displayGreetUserFilling(){
+		hideLoginFilling();
+		eraseGreetingFillingState();
+		makeViewDisplayGreetingFilling();
+		logger.fine("Displayed: greeting filling.");
+	}
+	
+	private void hideLoginFilling(){
+		view.hideLoginFilling();
+	}
+	
+	private void eraseGreetingFillingState(){
+		view.eraseGreetingFillingErrorField();
+	}
+	
+	private void makeViewDisplayGreetingFilling(){
+		view.displayGreetingFilling(userGreeting);
 	}
 	
 	private void displayLoginFillingWithServerNotAvaibleMessage(){
@@ -97,14 +152,15 @@ public class PagePresenter {
 		displayServerNotAvaibleMessageOnLoginFilling();
 	}
 	
-	private void hideGreetingFilling(){
-		view.hideGreetingFilling();
-	}
-	
 	private void displayLoginFilling(){
 		hideGreetingFilling();
 		eraseLoginFillingState();
 		makeViewDisplayLoginFilling();
+		logger.fine("Displayed: login filling.");
+	}
+	
+	private void hideGreetingFilling(){
+		view.hideGreetingFilling();
 	}
 	
 	private void eraseLoginFillingState(){
@@ -118,80 +174,14 @@ public class PagePresenter {
 	
 	private void displayServerNotAvaibleMessageOnLoginFilling(){
 		view.displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+		logger.finer("Displayed: message on login filling '" + Constants.SERVER_NOT_AVAIBLE + "'.");
 	}
-	
-	private boolean isUserLoggedIn(){
-		return user.isLoggedIn();
-	}
-	
-	private void getGreetingFromServer(){
-		Date timeSource = getCurrentDate();
 		
-		greetingService.getGreetingForTime(timeSource, user.getSessionId(), new AsyncCallback<String>() {
-			
-			@Override
-			public void onSuccess(String result) {
-				greeting = result;
-				greetingServerNotAvaible = false;
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				greetingServerNotAvaible = true;
-			}
-		});
-	}
-	
-	private Date getCurrentDate(){
-		return new Date();
-	}
-	
-	private void displayGreetUserFilling(){
-		hideLoginFilling();
-		eraseGreetingFillingState();
-		makeViewDisplayGreetingFilling();
-	}
-	
-	private void hideLoginFilling(){
-		view.hideLoginFilling();
-	}
-	
-	private void eraseGreetingFillingState(){
-		view.eraseGreetingFillingErrorField();
-	}
-	
-	private void makeViewDisplayGreetingFilling(){
-		String greeting = createGreeting();
-		view.displayGreetingFilling(greeting);
-	}
-	
-	private String createGreeting(){
-		String userName = user.getUserName();
-		
-		return greeting + ", " + userName + ".";
-	}
-	
 	public void logIn(String login, String password){
 		if(areLoginOrPasswordTooShort(login, password)){
 			showLoginOrPasswordTooShortMessage();
 		}else{
-			loginWithServer(login, password);
-			
-			if(loginServerNotAvaible){
-				displayServerNotAvaibleMessageOnLoginFilling();
-				logger.warning("Error: server not avaible.");
-			}else if(isUserLoggedIn()){
-				getGreetingFromServer();
-				
-				if(greetingServerNotAvaible){
-					displayServerNotAvaibleMessageOnLoginFilling();
-				}else{
-					displayGreetUserFilling();
-				}
-			}else{
-				displayWrongLoginOrPasswordMessage();
-				logger.fine("Displayed:login filling.");
-			}
+			tryToLoginWithServer(login, password);
 		}
 	}
 	
@@ -202,54 +192,67 @@ public class PagePresenter {
 	
 	private void showLoginOrPasswordTooShortMessage(){
 		view.displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+		logger.finer("Displayed: message on login filling '" 
+				+ Constants.LOGIN_OR_PASSWORD_TOO_SHORT + "'.");
 	}
 	
-	private void loginWithServer(String login, String password){		
-		loginService.loginServer(login, password,  new AsyncCallback<UserDTO>() {
-			
-			@Override
-			public void onSuccess(UserDTO result) {
-				user = result;
-				loginServerNotAvaible = false;
+	private void tryToLoginWithServer(String login, String password){		
+		loginService.loginServer(login, password,  new loginWithServerRequest());
+	}
+	
+	private class loginWithServerRequest implements AsyncCallback<UserDTO>{
+		
+		@Override
+		public void onSuccess(UserDTO result) {
+			logger.finer("Invoked: loginService.loginServer(...), returned '" + result + "'." );
+			if(isUserLoggedIn(result)){
+				saveUserData(result);
+				tryToGetGreetingFromGreetingServer();
+				refreshCookies();
+			}else{
+				displayWrongLoginOrPasswordMessage();
 			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				loginServerNotAvaible = true;
-			}
-		});
+		}
+		
+		private void refreshCookies(){
+			final long DURATION = 1000 * 60 * 30;
+			Date expires = new Date(System.currentTimeMillis() + DURATION);
+			Cookies.setCookie(Constants.COOKIE_TOKEN_NAME, token, expires);
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			displayServerNotAvaibleMessageOnLoginFilling();
+			logger.warning("Invoked: loginService.loginServer(...), server unavaible.");
+		}
 	}
 	
 	private void displayWrongLoginOrPasswordMessage(){
 		view.displayLoginError(Constants.INCORRECT_CREDENTIALS);
+		logger.finer("Displayed: message on login filling '" + Constants.INCORRECT_CREDENTIALS+ "'.");
 	}
 	
-	public void executeLogout(){
-		logoutWithServer();
-		
-		if(loginServerNotAvaible){
-			displayServerNotAvaibleMessageOnGreetingFilling();
-		}else{
+	public void executeLogout(){		
+		loginService.logout(token, new LogoutRequest());
+	}
+	
+	private class LogoutRequest implements AsyncCallback<Void>{
+
+		@Override
+		public void onSuccess(Void result) {
+			logger.warning("Invoked: loginService.logout(...), request executed.");
 			displayLoginFilling();
 		}
-	}
-	
-	private void logoutWithServer(){		
-		loginService.logout(new AsyncCallback<Void>() {
-			
-			@Override
-			public void onSuccess(Void result) {
-				loginServerNotAvaible = false;
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				loginServerNotAvaible = true;
-			}
-		});
+
+		@Override
+		public void onFailure(Throwable caught) {
+			logger.warning("Invoked: loginService.logout(...), server unavaible.");
+			displayServerNotAvaibleMessageOnGreetingFilling();
+		}
 	}
 	
 	private void displayServerNotAvaibleMessageOnGreetingFilling(){
 		view.displayGreetingFilling(Constants.SERVER_NOT_AVAIBLE);
+		logger.finer("Displayed: message on greeting filling '" + Constants.SERVER_NOT_AVAIBLE + "'.");
 	}
 }
