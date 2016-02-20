@@ -11,8 +11,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
 	@Override
-	public UserDTO loginServer(String name, String password) {
-		if(name.equals("john") && password.equals("smith")){
+	public UserDTO loginServer(String login, String password) {
+		if(login.equals("john") && password.equals("smith")){
 			return createLogedInDTO();
 		}else{
 			return createNotLogedInDTO();

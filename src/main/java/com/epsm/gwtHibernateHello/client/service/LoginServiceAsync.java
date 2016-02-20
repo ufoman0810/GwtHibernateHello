@@ -4,6 +4,7 @@ import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface LoginServiceAsync {
-	void loginServer(String name, String password, AsyncCallback<UserDTO> callback);
-	void isSessionIdStillLegal(String sessionId, AsyncCallback<UserDTO> callback);
+	void loginServer(String login, String password, AsyncCallback<UserDTO> callback);
+	void isSessionIdStillLegal(AsyncCallback<UserDTO> callback);
+	void logout(AsyncCallback<Void> callback);
 }
