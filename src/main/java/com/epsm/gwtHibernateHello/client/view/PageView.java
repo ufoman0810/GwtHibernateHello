@@ -4,7 +4,8 @@ import com.epsm.gwtHibernateHello.client.presenter.PagePresenter;
 
 public interface PageView {
 	void eraseLoginAndPassword();
-	void eraseErrorsFields();
+	void eraseLoginFillingErrorsFields();
+	void eraseGreetingFillingErrorField();
 	void displayPage();
 	void displayLoginFilling();
 	void displayGreetingFilling(String greeting);

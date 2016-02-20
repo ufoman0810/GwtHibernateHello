@@ -6,6 +6,7 @@ public class UserDTO implements Serializable{
 	private static final long serialVersionUID = -5882483518395338946L;
 	private String sessionId;
 	private String userName;
+	private String userGreeting;
 	private boolean loggedIn;
 	
 	public String getSessionId() {
@@ -22,6 +23,14 @@ public class UserDTO implements Serializable{
 	
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	
+	public String getUserGreeting() {
+		return userGreeting;
+	}
+	
+	public void setUserGreeting(String userGreeting) {
+		this.userGreeting = userGreeting;
 	}
 	
 	public boolean isLoggedIn() {

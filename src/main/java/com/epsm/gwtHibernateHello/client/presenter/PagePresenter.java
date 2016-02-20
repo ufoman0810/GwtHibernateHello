@@ -2,27 +2,26 @@ package com.epsm.gwtHibernateHello.client.presenter;
 
 import java.util.logging.Logger;
 
-import com.epsm.gwtHibernateHello.client.service.GreetingServiceAsync;
 import com.epsm.gwtHibernateHello.client.service.LoginServiceAsync;
 import com.epsm.gwtHibernateHello.client.view.PageView;
+import com.epsm.gwtHibernateHello.shared.Constants;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class PagePresenter {
 	private LoginServiceAsync loginService;
-	private GreetingServiceAsync greetingService;
 	private PageView view;
 	private String sessionId;
 	private UserDTO user;
-	private boolean expired;
+	private boolean serverNotAvaible;
 	private static Logger logger = Logger.getLogger("PagePresenter");
 	
-	public PagePresenter(LoginServiceAsync loginService, GreetingServiceAsync greetingService,
-			PageView view){
+	public PagePresenter(LoginServiceAsync loginService, PageView view){
+
+		
 		
 		this.loginService = loginService;
-		this.greetingService = greetingService;
 		this.view = view;
 	}
 
@@ -37,12 +36,23 @@ public class PagePresenter {
 	public void showPage(){
 		displayPage();
 		
-		if(isSessionActive()){
-			//displayGreetUserFilling();
-			logger.fine("Displayed: greet user filling.");
+		if(isSessionIdExistInCookie()){
+			checkWithServerIsSessionIdStillLegal();
+			
+			if(serverNotAvaible){
+				displayLoginFilling();
+				displayServerNotAvaibleMessageOnLoginFilling();
+				logger.warning("Error: server not avaible.");
+			}else if(isSessionActive()){
+				displayGreetUserFilling();
+				logger.fine("Displayed: greet user filling.");
+			}else{
+				displayLoginFilling();
+				logger.fine("Displayed:login filling.");
+			}
 		}else{
 			displayLoginFilling();
-			logger.fine("Displayed:login filling.");
+			return;
 		}
 	}
 	
@@ -50,58 +60,71 @@ public class PagePresenter {
 		view.displayPage();
 	}
 	
-	private boolean isSessionActive(){
-		getSessionIdFromCookies();
-		
-		if(sessionId == null){
-			return false;
-		}
-		if(isSessionExpiredOnServer()){
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private void getSessionIdFromCookies(){
-		sessionId = Cookies.getCookie("sessionId");
+	private boolean isSessionIdExistInCookie(){
+		sessionId = Cookies.getCookie(Constants.COOKIE_SESSION_ID);
 		logger.fine("Invoked: getSessionIdFromCookies() method, sessionId = '" + sessionId + "'.");
+		
+		return sessionId != null;
 	}
 	
-	private boolean isSessionExpiredOnServer(){		
-		loginService.loginFromSessionServer(new AsyncCallback<UserDTO>() {
+	private void checkWithServerIsSessionIdStillLegal(){		
+		loginService.isSessionIdStillLegal(sessionId, new AsyncCallback<UserDTO>() {
 			
 			@Override
 			public void onSuccess(UserDTO result) {
-				if(result.isLoggedIn()){
-					user = result;
-					expired = false;
-				}else{
-					expired = true;
-				}
+				user = result;
+				serverNotAvaible = false;
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				serverNotAvaible = true;
 			}
 		});
-	
-		return true;
 	}
 	
 	private void displayLoginFilling(){
-		eraseLoginViewState();
+		eraseLoginFillingState();
 		makeViewDisplayLoginFilling();
 	}
 	
-	private void eraseLoginViewState(){
+	private void eraseLoginFillingState(){
 		view.eraseLoginAndPassword();
-		view.eraseErrorsFields();
+		view.eraseLoginFillingErrorsFields();
 	}
 	
 	private void makeViewDisplayLoginFilling(){
 		view.displayLoginFilling();
 	}
+	
+	private void displayServerNotAvaibleMessageOnLoginFilling(){
+		view.displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+	}
+	
+	private boolean isSessionActive(){
+		return user.isLoggedIn();
+	}
+	
+	private void displayGreetUserFilling(){
+		eraseGreetingFillingState();
+		makeViewDisplayGreetingFilling();
+	}
+	
+	private void eraseGreetingFillingState(){
+		view.eraseGreetingFillingErrorField();
+	}
+	
+	private void makeViewDisplayGreetingFilling(){
+		String greeting = createGreeting();
+		view.displayGreetingFilling(greeting);
+	}
+	
+	private String createGreeting(){
+		return user.getUserGreeting() + ", " + user.getUserName() + ".";
+	}
+
+		
+	
+	
+	
 }

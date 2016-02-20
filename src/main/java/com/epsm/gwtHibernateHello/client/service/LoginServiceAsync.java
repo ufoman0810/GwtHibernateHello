@@ -5,5 +5,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface LoginServiceAsync {
 	void loginServer(String name, String password, AsyncCallback<UserDTO> callback);
-	void loginFromSessionServer(AsyncCallback<UserDTO> callback);
+	void isSessionIdStillLegal(String sessionId, AsyncCallback<UserDTO> callback);
 }

@@ -1,5 +1,8 @@
 package com.epsm.gwtHibernateHello.server.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.epsm.gwtHibernateHello.client.service.LoginService;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -35,7 +38,20 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	}
 	
 	@Override
-	public UserDTO loginFromSessionServer() {
-		return createLogedInDTO();
+	public UserDTO isSessionIdStillLegal(String clientSessionId){
+		String realSessionId = getRealSessionId();
+		
+		if(clientSessionId.equals(realSessionId)){
+			return createLogedInDTO();
+		}else{
+			return createNotLogedInDTO();
+		}
+	}
+	
+	private String getRealSessionId(){
+		HttpServletRequest request = getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		
+		return session.getId();
 	}
 }
