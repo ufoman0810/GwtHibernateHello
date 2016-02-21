@@ -1,7 +1,5 @@
 package com.epsm.gwtHibernateHello.server.domain;
 
-import com.epsm.gwtHibernateHello.shared.UserDTO;
-
 public class User {
 	private String login;
 	private String name;

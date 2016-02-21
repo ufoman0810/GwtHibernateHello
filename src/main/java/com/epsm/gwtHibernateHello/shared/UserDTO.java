@@ -34,7 +34,7 @@ public class UserDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "UserDTO [token=" + token + ", userName=" + userName + ", "
-				+ " loggedIn=" + loggedIn + "]";
+		return "UserDTO [token not null: " + (token != null) + ", userName: " + userName + ", "
+				+ "loggedIn: " + loggedIn + "]";
 	}
 }
