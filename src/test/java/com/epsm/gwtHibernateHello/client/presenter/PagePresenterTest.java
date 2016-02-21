@@ -90,7 +90,7 @@ public class PagePresenterTest {
 		
 		presenter.showPage();
 		
-		verify(loginService, never()).isTokenStillLegal(eq(TOKEN), isA(AsyncCallback.class));
+		verify(loginService, never()).isSessionStillLegal(eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	private void makeTokenNotExistInCookies(){
@@ -134,7 +134,7 @@ public class PagePresenterTest {
 				callback.onSuccess(makeNotLoggedInUserDTO());
 				return null;
 			}
-		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
+		}).when(loginService).isSessionStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	private UserDTO makeNotLoggedInUserDTO(){
@@ -167,7 +167,7 @@ public class PagePresenterTest {
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
+		}).when(loginService).isSessionStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	@Test
@@ -194,7 +194,7 @@ public class PagePresenterTest {
 				callback.onSuccess(makeLoggedInUserDTO());
 				return null;
 			}
-		}).when(loginService).isTokenStillLegal(anyString(), isA(AsyncCallback.class));
+		}).when(loginService).isSessionStillLegal(anyString(), isA(AsyncCallback.class));
 	}
 	
 	private UserDTO makeLoggedInUserDTO(){

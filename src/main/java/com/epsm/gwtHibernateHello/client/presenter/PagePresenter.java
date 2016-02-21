@@ -66,7 +66,7 @@ public class PagePresenter {
 	}
 	
 	private void checkWithServerIsTokenStillLegal(){		
-		loginService.isTokenStillLegal(token, new TokenLegalityRequest());
+		loginService.isSessionStillLegal(token, new TokenLegalityRequest());
 	}
 	
 	private class TokenLegalityRequest implements AsyncCallback<UserDTO>{

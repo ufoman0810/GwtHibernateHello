@@ -1,34 +1,86 @@
 package com.epsm.gwtHibernateHello.server.service;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epsm.gwtHibernateHello.client.service.LoginService;
+import com.epsm.gwtHibernateHello.server.domain.User;
+import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
-
+public class LoginServiceImpl extends TokenVerifier implements LoginService {
+	private UserDao dao;
+	private ThreadLocal<User> user = new ThreadLocal<User>();
+	private Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
+	public LoginServiceImpl(UserDao dao) {
+		if(dao == null){
+			String message = "Constructor: UserDao can't be null.";
+			throw new IllegalArgumentException(message);
+		}
+		
+		this.dao = dao;
+	}
+	
 	@Override
-	public UserDTO loginServer(String login, String password) {
-		if(login.equals("1111") && password.equals("1111")){
-			return createLogedInDTO();
+	public UserDTO loginServer(String login, String password){
+		getUserByLoginFromDB(login);
+		
+		if(isUserExists() && isPasswordCorrect(password)){
+			return createUserDTOAndSaveInSession();
 		}else{
-			return createNotLogedInDTO();
+			return createNotLogedInUserDTO();
 		}
 	}
 	
-	private UserDTO createLogedInDTO(){
+	private void getUserByLoginFromDB(String login){
+		user.set(dao.findUserByLogin(login));
+	}
+	
+	private boolean isUserExists(){
+		return user.get() != null;
+	}
+	
+	private boolean isPasswordCorrect(String password){
+		String storedHash = user.get().getPassword();
+
+		return BCrypt.checkpw(password, storedHash);
+	}
+	
+	private UserDTO createUserDTOAndSaveInSession(){
+		UserDTO userDto = createLogedInUserDTO();
+		saveUserDTOInSession(userDto);
+		
+		return userDto;
+	}
+	
+	private UserDTO createLogedInUserDTO(){
 		UserDTO dto = new UserDTO();
-		dto.setUserName("name");
-		dto.setToken("846");
+		dto.setUserName(user.get().getName());
+		dto.setToken(generateToken());
 		dto.setLoggedIn(true);
 		
 		return dto;
 	}
 	
-	private UserDTO createNotLogedInDTO(){
+	private String generateToken(){
+		return UUID.randomUUID().toString();
+	}
+	
+	private void saveUserDTOInSession(UserDTO userDto){
+		HttpServletRequest request = getRequest();
+		HttpSession session = request.getSession();
+		session.setAttribute("user", userDto);
+	}
+	
+	private UserDTO createNotLogedInUserDTO(){
 		UserDTO dto = new UserDTO();
 		dto.setUserName("");
 		dto.setToken("");
@@ -36,22 +88,26 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		
 		return dto;
 	}
-	
-	@Override
-	public UserDTO isTokenStillLegal(String sessionId){
-		return createLogedInDTO();
-	}
-	
-	private String getRealSessionId(){
-		HttpServletRequest request = getThreadLocalRequest();
-		HttpSession session = request.getSession();
-		
-		return session.getId();
-	}
 
 	@Override
-	public void logout(String sessionId) {
-		// TODO Auto-generated method stub
-		
+	public UserDTO isSessionStillLegal(String token){
+		if(isTokenCorrect(token)){
+			return getUserDTOfromSession();
+		}else{
+			return createNotLogedInUserDTO();
+		}
+	}
+	
+	@Override
+	public void logout(String token) {
+		if(isTokenCorrect(token)){
+			deleteUserDTOFromSession();
+		}
+	}
+	
+	private void deleteUserDTOFromSession(){
+		HttpServletRequest request = getRequest();
+		HttpSession session = request.getSession();
+		session.removeAttribute("user");
 	}
 }

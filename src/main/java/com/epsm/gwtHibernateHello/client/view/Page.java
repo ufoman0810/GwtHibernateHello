@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -43,6 +44,9 @@ public class Page extends Composite implements PageView{
 	
 	@UiField
 	Label logoutErrorLabel;
+	
+	@UiField
+	Button buttonLogin;
 	
 	public Page() {
 		resources = GWT.create(Resources.class);
