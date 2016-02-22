@@ -96,7 +96,7 @@ public class PagePresenter {
 	
 	private void saveUserData(UserDTO user){
 		token = user.getToken();
-		userName = user.getUserName();
+		userName = user.getName();
 	}
 	
 	private void tryToGetGreetingFromGreetingServer(){
