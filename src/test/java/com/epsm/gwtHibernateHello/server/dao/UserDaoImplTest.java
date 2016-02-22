@@ -33,7 +33,7 @@ public class UserDaoImplTest extends DBTestCase{
 	@Override
 	protected IDataSet getDataSet() throws Exception {
 		return new FlatXmlDataSetBuilder().build(new FileInputStream(
-				"src/test/resources/user.xml"));
+				"src/test/resources/testDb.xml"));
 	}
 	
 	@Test

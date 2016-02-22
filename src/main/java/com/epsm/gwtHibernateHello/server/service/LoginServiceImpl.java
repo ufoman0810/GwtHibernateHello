@@ -10,32 +10,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.gwtHibernateHello.client.service.LoginService;
+import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
 import com.epsm.gwtHibernateHello.server.domain.User;
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 
 @SuppressWarnings("serial")
-public class LoginServiceImpl extends TokenVerifier implements LoginService {
+public class LoginServiceImpl extends ServiceUtils implements LoginService {
 	private UserDao dao;
 	private ThreadLocal<User> user;
 	private Logger logger;
 	
-	public LoginServiceImpl(UserDao dao) {
+	public LoginServiceImpl() {
 		logger = LoggerFactory.getLogger(LoginServiceImpl.class);
-		
-		if(dao == null){
-			String message = "Constructor: UserDao can't be null.";
-			logger.error(message);
-			throw new IllegalArgumentException(message);
-		}
-		
+		dao = ConfigurationServlet.getUsedDao();
 		user = new ThreadLocal<User>();
-		this.dao = dao;
-		logger.debug("Created: LoginServiceImpl.");
+		
+		logger.info("Created: LoginServiceImpl.");
 	}
 	
 	@Override
 	public UserDTO loginServer(String login, String password){
+		logger.info("Invoked: loginServer(login: {}, ...), from: {}.", login, getRemoteAddr());
+		
 		getUserByLoginFromDB(login);
 		
 		if(isUserExists() && isPasswordCorrect(password)){
@@ -51,7 +48,7 @@ public class LoginServiceImpl extends TokenVerifier implements LoginService {
 		User retreivedUser = dao.findUserByLogin(login);
 		user.set(retreivedUser);
 		logger.debug("Invoked: getUserByLoginFromDB({}), DB returned user: {}.",
-				login, retreivedUser != null);
+		login, retreivedUser != null);
 	}
 	
 	private boolean isUserExists(){
@@ -75,7 +72,8 @@ public class LoginServiceImpl extends TokenVerifier implements LoginService {
 	
 	private UserDTO createLoggedInUserDTO(){
 		UserDTO dto = new UserDTO();
-		dto.setUserName(user.get().getName());
+		dto.setLogin(user.get().getLogin());
+		dto.setName(user.get().getName());
 		dto.setToken(generateToken());
 		dto.setLoggedIn(true);
 		logger.debug("Invoked: createLoggedInUserDTO(), returned: {}.", dto);
@@ -96,7 +94,8 @@ public class LoginServiceImpl extends TokenVerifier implements LoginService {
 	
 	private UserDTO createNotLogedInUserDTO(){
 		UserDTO dto = new UserDTO();
-		dto.setUserName("");
+		dto.setLogin("");
+		dto.setName("");
 		dto.setToken("");
 		dto.setLoggedIn(false);
 		logger.debug("Invoked: createNotLogedInUserDTO(), returned: {}.", dto);
@@ -106,9 +105,11 @@ public class LoginServiceImpl extends TokenVerifier implements LoginService {
 
 	@Override
 	public UserDTO isSessionStillLegal(String token){
+		logger.info("Invoked: isSessionStillLegal(...), from: {}.", getRemoteAddr());
+
 		if(isTokenCorrect(token)){
 			logger.info("Session restored: for user with login: {}, from: {}.",
-					user.get().getLogin(), getRemoteAddr());
+					getUserLogin(), getRemoteAddr());
 			return getUserDTOfromSession();
 		}else{
 			logger.info("Session restoring denied: for user from: {}.", getRemoteAddr());
@@ -118,9 +119,11 @@ public class LoginServiceImpl extends TokenVerifier implements LoginService {
 	
 	@Override
 	public void logout(String token) {
+		logger.info("Invoked: logout(...) from: {}.", getRemoteAddr());
+		
 		if(isTokenCorrect(token)){
 			logger.info("Logged out: user with login: {}, from: {}.",	
-					user.get().getLogin(), getRemoteAddr());
+					getUserLogin(), getRemoteAddr());
 			deleteUserDTOFromSession();
 		}else{
 			logger.warn("Denied: logging out fo user with wrong token from: {}.", getRemoteAddr());

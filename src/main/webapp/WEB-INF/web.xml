@@ -12,6 +12,15 @@
 		<servlet-name>greetingServlet</servlet-name>
 		<servlet-class>com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>configurationServlet</servlet-name>
+		<servlet-class>com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>remoteLogging</servlet-name>
+		<servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>loginServlet</servlet-name>
@@ -21,4 +30,8 @@
 		<servlet-name>greetingServlet</servlet-name>
 		<url-pattern>/GwtHibernateHello/greeting</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>remoteLogging</servlet-name>
+	<url-pattern>/GwtHibernateHello/remote_logging</url-pattern>
+</servlet-mapping>
 </web-app>

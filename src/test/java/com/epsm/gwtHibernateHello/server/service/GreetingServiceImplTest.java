@@ -19,21 +19,20 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.epsm.hello.model.Message;
 import com.epsm.hello.model.MessageFactory;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Locale.class)
+@PrepareForTest({Locale.class, ConfigurationServlet.class})
 public class GreetingServiceImplTest {
 	private MessageFactory messageFactory;
 	private GreetingServiceImpl service;
@@ -56,32 +55,23 @@ public class GreetingServiceImplTest {
 	@Before
 	public void setUp(){
 		messageFactory = mock(MessageFactory.class);
-		service = spy(new GreetingServiceImpl(messageFactory));
 		request = mock(HttpServletRequest.class);
 		session = mock(HttpSession.class);
 		localeCaptor = ArgumentCaptor.forClass(Locale.class);
 		timeCaptor= ArgumentCaptor.forClass(LocalTime.class);
 		userDto = new UserDTO();
 		message = mock(Message.class);
+		PowerMockito.mockStatic(ConfigurationServlet.class);
+		when(ConfigurationServlet.getMesageFactory()).thenReturn(messageFactory);
+		service = spy(new GreetingServiceImpl());
 		
 		userDto.setToken(RIGHT_TOKEN);
 		when(service.getRequest()).thenReturn(request);
 		when(request.getLocale()).thenReturn(LOCALE);
 		when(request.getSession()).thenReturn(session);
 		when(session.getAttribute("user")).thenReturn(userDto);
-		when(messageFactory.getMessage(isA(LocalTime.class), eq(LOCALE))).thenReturn(message);
+		when(messageFactory.getMessage(eq(LOCALE), isA(LocalTime.class))).thenReturn(message);
 		when(message.toLocalizedString()).thenReturn(GREETING);
-	}
-	
-	@Rule
-	public ExpectedException expectedEx = ExpectedException.none();
-	
-	@Test
-	public void exceptionInConstructorIfloginServiceIsNull(){
-		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: MessageFactory can't be null.");
-	    
-	    new GreetingServiceImpl(null);
 	}
 	
 	@Test
@@ -122,7 +112,7 @@ public class GreetingServiceImplTest {
 	}
 	
 	private void captureParameters(){
-		verify(messageFactory).getMessage(timeCaptor.capture(), localeCaptor.capture());
+		verify(messageFactory).getMessage(localeCaptor.capture(), timeCaptor.capture());
 		actualTime = timeCaptor.getValue();
 		actualLocale = localeCaptor.getValue();
 	}

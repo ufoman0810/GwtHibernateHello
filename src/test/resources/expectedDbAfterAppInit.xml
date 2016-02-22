@@ -1,0 +1,4 @@
+<dataset>
+	<user id="1" login="ivan" name="Иван" password="$2a$10$oJTkcPQ24dviKdG7THJEd.VUF.LZbaQJs.kusVl/drlRzOwe4z5B6" />
+	<user id="2" login="john" name="John" password="$2a$10$OURcY991jnlMby2pLgAueeduhkCmR9dTlfUc6yuYQ3Rxsv.0UHc4q" />
+</dataset>

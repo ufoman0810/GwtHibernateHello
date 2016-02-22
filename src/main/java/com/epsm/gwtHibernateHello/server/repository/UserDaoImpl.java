@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epsm.gwtHibernateHello.server.configuration.SessionFactorySource;
 import com.epsm.gwtHibernateHello.server.domain.User;
 
 public class UserDaoImpl implements UserDao{
@@ -50,7 +51,6 @@ public class UserDaoImpl implements UserDao{
 			tx = session.beginTransaction();
 			
 			SQLQuery query = session.createSQLQuery(script);
-			//Query query = session.createQuery("BEGIN " + script + " END;");
 			query.executeUpdate();
 
 			tx.commit();
@@ -64,6 +64,6 @@ public class UserDaoImpl implements UserDao{
 			session.close(); 
 		}
 		
-		logger.debug("Invoked: executeNativeSQL({}), returned {}.", script, user);
+		logger.debug("Invoked: executeNativeSQL(...), returned {}.", user);
 	}
 }

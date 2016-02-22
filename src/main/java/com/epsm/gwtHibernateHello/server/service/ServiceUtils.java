@@ -10,8 +10,8 @@ import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class TokenVerifier extends RemoteServiceServlet{
-	private Logger logger = LoggerFactory.getLogger(TokenVerifier.class);
+public class ServiceUtils extends RemoteServiceServlet{
+	private Logger logger = LoggerFactory.getLogger(ServiceUtils.class);
 	
 	protected boolean isTokenCorrect(String token){
 		if(token == null){
@@ -60,6 +60,16 @@ public class TokenVerifier extends RemoteServiceServlet{
 		HttpServletRequest request = getRequest();
 		
 		return request.getRemoteAddr();
+	}
+	
+	protected String getUserLogin(){
+		UserDTO userDTO = getUserDTOfromSession();
+		
+		if(userDTO == null){
+			return "there is no user in session.";
+		}else{
+			return userDTO.getLogin();
+		}
 	}
 	
 	//Temporary solution, as I didn't find how to test services without it.

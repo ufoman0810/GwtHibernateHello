@@ -11,16 +11,21 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
 import com.epsm.gwtHibernateHello.server.domain.User;
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ConfigurationServlet.class)
 public class LoginServiceImplTest{
 	private UserDao dao;
 	private LoginServiceImpl service;
@@ -40,10 +45,12 @@ public class LoginServiceImplTest{
 	@Before
 	public void setUp() {
 		dao = mock(UserDao.class);
-		service = spy(new LoginServiceImpl(dao));
 		user = new User();
 		request = mock(HttpServletRequest.class);
 		session = mock(HttpSession.class);
+		PowerMockito.mockStatic(ConfigurationServlet.class);
+		when(ConfigurationServlet.getUsedDao()).thenReturn(dao);
+		service = spy(new LoginServiceImpl());
 		
 		user.setName(USER_NAME);
 		user.setLogin(RIGHT_LOGIN);
@@ -59,17 +66,6 @@ public class LoginServiceImplTest{
 				return userDto;
 			}
 		});
-	}
-	
-	@Rule
-	public ExpectedException expectedEx = ExpectedException.none();
-	
-	@Test
-	public void exceptionInConstructorIfUserDaoIsNull(){
-		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: UserDao can't be null.");
-	    
-	    new LoginServiceImpl(null);
 	}
 	
 	@Test
@@ -99,7 +95,7 @@ public class LoginServiceImplTest{
 		loginServerWithRightLoginAndRightPassword();
 		
 		Assert.assertTrue(userDto.isLoggedIn());
-		Assert.assertEquals(USER_NAME, userDto.getUserName());
+		Assert.assertEquals(USER_NAME, userDto.getName());
 		Assert.assertNotNull(userDto.getToken());
 	}
 	
@@ -136,7 +132,7 @@ public class LoginServiceImplTest{
 		tryToJoinSessionWithRightToken();
 		
 		Assert.assertTrue(userDto.isLoggedIn());
-		Assert.assertEquals(USER_NAME, userDto.getUserName());
+		Assert.assertEquals(USER_NAME, userDto.getName());
 		Assert.assertNotNull(userDto.getToken());
 	}
 	
