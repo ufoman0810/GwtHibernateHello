@@ -241,7 +241,7 @@ public class PagePresenter {
 
 		@Override
 		public void onSuccess(Void result) {
-			logger.warning("Invoked: loginService.logout(...), request executed.");
+			logger.info("Invoked: loginService.logout(...), request executed.");
 			displayLoginFilling();
 		}
 
