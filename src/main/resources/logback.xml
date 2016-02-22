@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property resource="application.properties"/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %-23([%thread]) %-47(%logger{48}) - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="web-application" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-10([%thread]) %-30(%logger{30}) - %msg%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/home/anonimous/programming/projects/Tests/hl/logs/log.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
+	</appender>
+	
+	<logger name="com.epsm.gwtHibernateHello" level="DEBUG" additivity="false">
+		<appender-ref ref="web-application" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT"/>
+	</root>
+</configuration>
