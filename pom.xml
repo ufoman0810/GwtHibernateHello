@@ -46,6 +46,20 @@
 			<version>0.4.1</version>
 		</dependency>
 		
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.0.2.Final</version>
+		</dependency>
+		
+		<!-- H2 data base -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.190</version>
+		</dependency>
+		
 		<!-- hello. first test task -->
 		<dependency>
 			<groupId>com.epsm</groupId>
@@ -64,6 +78,13 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.6.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.1</version>
+			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
