@@ -1,8 +1,6 @@
 package com.epsm.gwtHibernateHello.server.dao;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;

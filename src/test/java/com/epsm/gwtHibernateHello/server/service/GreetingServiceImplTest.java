@@ -1,5 +1,22 @@
 package com.epsm.gwtHibernateHello.server.service;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,22 +28,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.epsm.gwtHibernateHello.client.presenter.PagePresenter;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.epsm.hello.model.Message;
 import com.epsm.hello.model.MessageFactory;
-
-import static org.mockito.Mockito.*;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Locale.class)
