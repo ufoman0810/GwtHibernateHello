@@ -51,6 +51,6 @@ public class User{
 	
 	@Override
 	public String toString() {
-		return String.format("User [Id: %s, login: %s, name: %s.", id, login, name);
+		return String.format("User [login: %s, name: %s]", login, name);
 	}
 }
