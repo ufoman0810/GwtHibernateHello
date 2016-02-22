@@ -1,4 +1,4 @@
-package com.epsm.gwtHibernateHello.server.repository;
+package com.epsm.gwtHibernateHello.server.configuration;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -17,8 +17,11 @@ public class SessionFactorySource {
 		} catch (Throwable e) {
 			//That is antipattern but as there isn't any container that will log exception again I log it.
 			logger.error("error while creating sessionFactory.", e);
+			System.err.println(e);
 			throw new ExceptionInInitializerError(e);
 	    }
+		
+		logger.info("Created: SessionFactorySource.");
 	}
 
 	public static SessionFactory getSessionFactory() {
