@@ -387,7 +387,7 @@ public class PagePresenterTest {
 		
 		presenter.executeLogout();
 		
-		verify(view).displayGreetingFilling(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLogoutError(Constants.SERVER_NOT_AVAIBLE);
 	}
 	
 	@SuppressWarnings("unchecked")

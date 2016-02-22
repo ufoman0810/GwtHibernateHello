@@ -59,7 +59,8 @@ public class PagePresenter {
 	}
 	
 	private boolean isTokenExistInCookies(){
-		boolean exist = Cookies.getCookie(Constants.COOKIE_TOKEN_NAME) != null;
+		token = Cookies.getCookie(Constants.COOKIE_TOKEN_NAME);
+		boolean exist = (token != null);
 		logger.finer("Invoked: isTokenExistInCookies(), returned '" + exist + "'." );
 		
 		return exist;
@@ -217,7 +218,7 @@ public class PagePresenter {
 		private void refreshCookies(){
 			final long DURATION = 1000 * 60 * 30;
 			Date expires = new Date(System.currentTimeMillis() + DURATION);
-			Cookies.setCookie(Constants.COOKIE_TOKEN_NAME, token, expires);
+			Cookies.setCookie(Constants.COOKIE_TOKEN_NAME, token, expires, null, "/", false);
 		}
 		
 		@Override
@@ -252,7 +253,7 @@ public class PagePresenter {
 	}
 	
 	private void displayServerNotAvaibleMessageOnGreetingFilling(){
-		view.displayGreetingFilling(Constants.SERVER_NOT_AVAIBLE);
+		view.displayLogoutError(Constants.SERVER_NOT_AVAIBLE);
 		logger.finer("Displayed: message on greeting filling '" + Constants.SERVER_NOT_AVAIBLE + "'.");
 	}
 }
