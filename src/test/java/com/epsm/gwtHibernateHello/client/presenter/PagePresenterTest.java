@@ -1,6 +1,6 @@
 package com.epsm.gwtHibernateHello.client.presenter;
 
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.doAnswer;
@@ -199,7 +199,7 @@ public class PagePresenterTest {
 	
 	private UserDTO makeLoggedInUserDTO(){
 		UserDTO user = new UserDTO();
-		user.setUserName(USERNAME);
+		user.setName(USERNAME);
 		user.setToken(TOKEN);
 		user.setLoggedIn(true);
 		
@@ -331,7 +331,7 @@ public class PagePresenterTest {
 	
 	@Test
 	public void displaysServerErrorIfLoginAndPasswordCorrectButGreetingServerIsUnavaibleInLOginFilling(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		makeGreetingServiceNotAvaible();
 		
 		presenter.logIn(LOGIN, PASSWORD);
@@ -340,7 +340,7 @@ public class PagePresenterTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod(){
+	private void makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod(){
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
 				AsyncCallback<UserDTO> callback = (AsyncCallback<UserDTO>) invocation.getArguments()[2];
@@ -352,7 +352,7 @@ public class PagePresenterTest {
 	
 	@Test
 	public void displaysLoginOrPasswordTooShortMessageIfLoginTooShort(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		makeGreetingServiceAvaible();
 		
 		presenter.logIn(TOO_SHORT_LOGIN, PASSWORD);
@@ -362,7 +362,7 @@ public class PagePresenterTest {
 	
 	@Test
 	public void displaysLoginOrPasswordTooShortMessageIfPasswordTooShort(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		makeGreetingServiceAvaible();
 		
 		presenter.logIn(LOGIN, TOO_SHORT_PASSWORD);
@@ -372,7 +372,7 @@ public class PagePresenterTest {
 	
 	@Test
 	public void displaysGreetingFillingWithoutErrorIfLoginAndPasswordCorrectAndGreetingServerIsAvaible(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		makeGreetingServiceAvaible();
 		
 		presenter.logIn(LOGIN, PASSWORD);
@@ -424,19 +424,19 @@ public class PagePresenterTest {
 	
 	@Test
 	public void refreshesCookieAfterSuccessfullLogin(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
 		PowerMockito.verifyStatic();
-		Cookies.setCookie(eq(Constants.COOKIE_TOKEN_NAME), eq(TOKEN), isA(Date.class));
+		Cookies.setCookie(eq(Constants.COOKIE_TOKEN_NAME), eq(TOKEN), isA(Date.class), 
+				anyString(), eq("/"), eq(false));
 	}
-	
-	
+
 	@Test
 	@SuppressWarnings("unchecked")
 	public void storesTokenAfterSuccessfullLoginAndUseItWhereCallsGetGreetingForTime(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
@@ -447,7 +447,7 @@ public class PagePresenterTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void storesTokenAfterSuccessfullLoginAndUseItWhereCallsLogout(){
-		makeLoginServiceReturnsLoggedInUserDTOWithLoginWithServerMethod();
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		presenter.executeLogout();
