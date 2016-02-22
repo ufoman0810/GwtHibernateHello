@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class UserDTO implements Serializable{
 	private static final long serialVersionUID = -3817844216950723658L;
 	private String token;
-	private String userName;
+	private String login;
+	private String name;
 	private boolean loggedIn;
 	
 	public String getToken() {
@@ -16,12 +17,20 @@ public class UserDTO implements Serializable{
 		this.token = token;
 	}
 	
-	public String getUserName() {
-		return userName;
+	public String getLogin() {
+		return login;
 	}
 	
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public boolean isLoggedIn() {
@@ -34,7 +43,7 @@ public class UserDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return String.format("UserDTO [token not null: %s, userName: %s, loggedIn: %s.", 
-				(token != null), userName, userName);
+		return "UserDTO [token not null: " +(token != null) + ", login: "
+				+ login + ", userName: " + name + ", loggedIn: " + loggedIn + "]";
 	}
 }
