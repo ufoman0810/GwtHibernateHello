@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.gwtHibernateHello.server.repository.UserDaoImpl;
+import com.epsm.hello.configutation.Configurator;
 import com.epsm.hello.model.MessageFactory;
-import com.epsm.hello.model.MessageFactoryImpl;
 
 @SuppressWarnings("serial")
 public class ConfigurationServlet extends HttpServlet{
@@ -23,9 +23,10 @@ public class ConfigurationServlet extends HttpServlet{
 
 	@Override
 	public void init(){
+		Configurator configurator = new Configurator();
 		logger = LoggerFactory.getLogger(ConfigurationServlet.class);
 		userDao = new UserDaoImpl();
-		messageFactory = new MessageFactoryImpl();
+		messageFactory = configurator.getConfiguredFactory();
 		
 		try{
 			fillDatabaseFromScript();
