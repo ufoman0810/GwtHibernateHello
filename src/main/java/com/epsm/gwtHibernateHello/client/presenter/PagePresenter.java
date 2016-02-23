@@ -48,7 +48,7 @@ public class PagePresenter {
 		displayPage();
 		
 		if(isTokenExistInCookies()){
-			checkWithServerIsTokenStillLegal();
+			checkWithServerIsSessionStillLegal();
 		}else{
 			displayLoginFilling();
 		}
@@ -59,18 +59,18 @@ public class PagePresenter {
 	}
 	
 	private boolean isTokenExistInCookies(){
-		token = Cookies.getCookie(Constants.COOKIE_TOKEN_NAME);
+		token = Cookies.getCookie(Constants.COOKIE_TOKEN);
 		boolean exist = (token != null);
 		logger.finer("Invoked: isTokenExistInCookies(), returned '" + exist + "'." );
 		
 		return exist;
 	}
 	
-	private void checkWithServerIsTokenStillLegal(){		
-		loginService.isSessionStillLegal(token, new TokenLegalityRequest());
+	private void checkWithServerIsSessionStillLegal(){		
+		loginService.isSessionStillLegal(token, new SessionLegalityRequest());
 	}
 	
-	private class TokenLegalityRequest implements AsyncCallback<UserDTO>{
+	private class SessionLegalityRequest implements AsyncCallback<UserDTO>{
 
 		@Override
 		public void onSuccess(UserDTO result) {
@@ -218,7 +218,7 @@ public class PagePresenter {
 		private void refreshCookies(){
 			final long DURATION = 1000 * 60 * 30;
 			Date expires = new Date(System.currentTimeMillis() + DURATION);
-			Cookies.setCookie(Constants.COOKIE_TOKEN_NAME, token, expires, null, "/", false);
+			Cookies.setCookie(Constants.COOKIE_TOKEN, token, expires, null, "/", false);
 		}
 		
 		@Override

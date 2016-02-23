@@ -16,8 +16,7 @@ public class SessionFactorySource {
 			sessionFactory = new Configuration().configure().buildSessionFactory();
 		} catch (Throwable e) {
 			//That is antipattern but as there isn't any container that will log exception again I log it.
-			logger.error("error while creating sessionFactory.", e);
-			System.err.println(e);
+			logger.error("Error: while creating sessionFactory.", e);
 			throw new ExceptionInInitializerError(e);
 	    }
 		
