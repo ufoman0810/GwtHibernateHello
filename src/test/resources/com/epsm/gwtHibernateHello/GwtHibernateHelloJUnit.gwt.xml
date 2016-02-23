@@ -2,6 +2,6 @@
 <module rename-to="GwtHibernateHello">
 	<inherits name='com.epsm.gwtHibernateHello.GwtHibernateHello' />
                  
-	<servlet path="/GwtHibernateHello/login" class="com.epsm.gwtHibernteHello.server.service.LoginServiceImpl" />
-	<servlet path="/GwtHibernateHello/greeting" class="com.epsm.gwtHibernteHello.server.service.GreetingServiceImpl" />
+	<servlet path="/GwtHibernateHello/login" class="com.epsm.gwtHibernateHello.server.service.LoginServiceImpl" />
+	<servlet path="/GwtHibernateHello/greeting" class="com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl" />
 </module>
