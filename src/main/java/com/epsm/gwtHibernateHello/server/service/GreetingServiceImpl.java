@@ -30,7 +30,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	}
 	
 	@Override
-	public String getGreetingForTime(Date timeSource, String token) {
+	public String getGreeting(Date timeSource, String token) {
 		if(timeSource == null){
 			logger.warn("Attempt: get greeting with null Date from: {}.", getRemoteAddr());
 			return null;

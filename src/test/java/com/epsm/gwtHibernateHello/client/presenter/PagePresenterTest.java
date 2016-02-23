@@ -214,7 +214,7 @@ public class PagePresenterTest {
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
+		}).when(greetingService).getGreeting(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
@@ -235,7 +235,7 @@ public class PagePresenterTest {
 				callback.onSuccess(GREETING);
 				return null;
 			}
-		}).when(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
+		}).when(greetingService).getGreeting(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
@@ -440,7 +440,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
-		verify(greetingService).getGreetingForTime(isA(Date.class), eq(TOKEN),
+		verify(greetingService).getGreeting(isA(Date.class), eq(TOKEN),
 				isA(AsyncCallback.class));
 	}
 	

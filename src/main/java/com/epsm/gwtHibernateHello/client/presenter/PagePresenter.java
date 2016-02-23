@@ -101,7 +101,7 @@ public class PagePresenter {
 	
 	private void tryToGetGreetingFromGreetingServer(){
 		Date timeSource = getCurrentDate();
-		greetingService.getGreetingForTime(timeSource, token, new GetGreetingRequest());
+		greetingService.getGreeting(timeSource, token, new GetGreetingRequest());
 	}
 	
 	private Date getCurrentDate(){

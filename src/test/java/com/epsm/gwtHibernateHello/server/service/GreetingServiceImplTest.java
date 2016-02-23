@@ -82,7 +82,7 @@ public class GreetingServiceImplTest {
 	}
 	
 	private void tryGetGreetingWithNullDate(){
-		greeting = service.getGreetingForTime(null, RIGHT_TOKEN);
+		greeting = service.getGreeting(null, RIGHT_TOKEN);
 	}
 	
 	@Test
@@ -93,7 +93,7 @@ public class GreetingServiceImplTest {
 	}
 	
 	private void tryToGetGreetingWithWrongToken(){
-		greeting = service.getGreetingForTime(TIME_SOURCE, WRONG_TOKEN);
+		greeting = service.getGreeting(TIME_SOURCE, WRONG_TOKEN);
 	}
 	
 	@Test
@@ -108,7 +108,7 @@ public class GreetingServiceImplTest {
 	}
 	
 	private void makeServiceReturnGreeting(){
-		greeting = service.getGreetingForTime(TIME_SOURCE, RIGHT_TOKEN);
+		greeting = service.getGreeting(TIME_SOURCE, RIGHT_TOKEN);
 	}
 	
 	private void captureParameters(){
