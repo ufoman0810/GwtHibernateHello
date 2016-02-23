@@ -15,4 +15,7 @@
     <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
     
     <set-property name="user.agent" value="gecko1_8"/>
+    
+    <servlet path="/GwtHibernateHello/login" class="com.epsm.gwtHibernateHello.server.service.LoginServiceImpl" />
+	<servlet path="/GwtHibernateHello/greeting" class="com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl" />
 </module>
