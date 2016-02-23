@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.gwtHibernateHello.client.service.GreetingService;
-import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
+import com.epsm.gwtHibernateHello.server.configuration.Configuration;
 import com.epsm.hello.model.Message;
 import com.epsm.hello.model.MessageFactory;
 
@@ -25,7 +25,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	
 	public GreetingServiceImpl(){
 		logger = LoggerFactory.getLogger(GreetingServiceImpl.class);
-		messageFactory = ConfigurationServlet.getMesageFactory();
+		messageFactory = Configuration.getMesageFactory();
 		logger.info("Created: GreetingServiceImpl.");
 	}
 	

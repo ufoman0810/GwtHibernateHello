@@ -26,13 +26,13 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
+import com.epsm.gwtHibernateHello.server.configuration.Configuration;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 import com.epsm.hello.model.Message;
 import com.epsm.hello.model.MessageFactory;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Locale.class, ConfigurationServlet.class})
+@PrepareForTest({Locale.class, Configuration.class})
 public class GreetingServiceImplTest {
 	private MessageFactory messageFactory;
 	private GreetingServiceImpl service;
@@ -61,8 +61,8 @@ public class GreetingServiceImplTest {
 		timeCaptor= ArgumentCaptor.forClass(LocalTime.class);
 		userDto = new UserDTO();
 		message = mock(Message.class);
-		PowerMockito.mockStatic(ConfigurationServlet.class);
-		when(ConfigurationServlet.getMesageFactory()).thenReturn(messageFactory);
+		PowerMockito.mockStatic(Configuration.class);
+		when(Configuration.getMesageFactory()).thenReturn(messageFactory);
 		service = spy(new GreetingServiceImpl());
 		
 		userDto.setToken(RIGHT_TOKEN);

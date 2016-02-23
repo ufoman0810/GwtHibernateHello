@@ -19,13 +19,13 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet;
+import com.epsm.gwtHibernateHello.server.configuration.Configuration;
 import com.epsm.gwtHibernateHello.server.domain.User;
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(ConfigurationServlet.class)
+@PrepareForTest(Configuration.class)
 public class LoginServiceImplTest{
 	private UserDao dao;
 	private LoginServiceImpl service;
@@ -48,8 +48,8 @@ public class LoginServiceImplTest{
 		user = new User();
 		request = mock(HttpServletRequest.class);
 		session = mock(HttpSession.class);
-		PowerMockito.mockStatic(ConfigurationServlet.class);
-		when(ConfigurationServlet.getUsedDao()).thenReturn(dao);
+		PowerMockito.mockStatic(Configuration.class);
+		when(Configuration.getUsedDao()).thenReturn(dao);
 		service = spy(new LoginServiceImpl());
 		
 		user.setName(USER_NAME);

@@ -14,16 +14,12 @@ import org.junit.Test;
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
 import com.epsm.hello.model.MessageFactory;
 
-public class ConfigurationServletTest {
-	private static ConfigurationServlet configuration;
+public class ConfigurationTest {
 	private static IDatabaseTester databaseTester;
 	
 	@BeforeClass
 	public static void setUp() throws ClassNotFoundException{
-		configuration = new ConfigurationServlet();
 		databaseTester = new JdbcDatabaseTester("org.h2.Driver", "jdbc:h2:mem:test_mem");
-		
-		configuration.init();
 	}
 	
 	@Test
@@ -37,15 +33,31 @@ public class ConfigurationServletTest {
 	
 	@Test
 	public void getUsedDaoMethodReturnsNotNullUserDao(){
-		UserDao userDao = ConfigurationServlet.getUsedDao();
+		UserDao userDao = Configuration.getUsedDao();
 		
 		Assert.assertNotNull(userDao);
 	}
 	
 	@Test
+	public void getUsedDaoMethodReturnsTheSameInstanceEachTime(){
+		UserDao userDao_1 = Configuration.getUsedDao();
+		UserDao userDao_2 = Configuration.getUsedDao();
+		
+		Assert.assertTrue(userDao_1 == userDao_2);
+	}
+	
+	@Test
 	public void getMesageFactoryMethodReturnsNotNullMessageFactory(){
-		MessageFactory messageFactory = ConfigurationServlet.getMesageFactory();
+		MessageFactory messageFactory = Configuration.getMesageFactory();
 		
 		Assert.assertNotNull(messageFactory);
+	}
+	
+	@Test
+	public void getMesageFactoryMethodReturnsTheSameInstanceEachTime(){
+		MessageFactory messageFactory_1 = Configuration.getMesageFactory();
+		MessageFactory messageFactory_2 = Configuration.getMesageFactory();
+		
+		Assert.assertTrue(messageFactory_1 == messageFactory_2);
 	}
 }
