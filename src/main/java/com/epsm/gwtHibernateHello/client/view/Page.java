@@ -81,6 +81,7 @@ public class Page extends Composite implements PageView{
 	@Override
 	public void displayLoginFilling() {
 		DOM.getElementById("loginFilling").getStyle().setDisplay(Display.BLOCK);
+		loginBox.setFocus(true);
 	}
 
 	@Override
