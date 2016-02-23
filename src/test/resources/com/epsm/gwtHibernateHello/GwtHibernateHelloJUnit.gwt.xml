@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module rename-to="GwtHibernateHello">
-	<inherits name='com.epsm.gwtHibernateHello.GwtHibernateHello' />
-                 
-	<servlet path="/GwtHibernateHello/login" class="com.epsm.gwtHibernateHello.server.service.LoginServiceImpl" />
-	<servlet path="/GwtHibernateHello/greeting" class="com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl" />
-</module>
