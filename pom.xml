@@ -18,6 +18,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<!-- GWT -->
 		<dependency>
@@ -62,8 +69,8 @@
 		
 		<!-- hello. first test task -->
 		<dependency>
-			<groupId>com.epsm</groupId>
-			<artifactId>hello</artifactId>
+			<groupId>com.github.epsm-test</groupId>
+			<artifactId>Hello</artifactId>
 			<version>0.0.1</version>
 		</dependency>
     
