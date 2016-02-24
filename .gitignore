@@ -14,5 +14,4 @@ src/main/webapp/META-INF/
 .project
 *.class
 *.jar
-*.png
 *.*~
