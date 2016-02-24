@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.epsm.gwtHibernateHello.client.service.GreetingServiceAsync;
 import com.epsm.gwtHibernateHello.client.service.LoginServiceAsync;
+import com.epsm.gwtHibernateHello.client.view.ErrorMessages;
 import com.epsm.gwtHibernateHello.client.view.PageView;
 import com.epsm.gwtHibernateHello.shared.Constants;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
@@ -18,10 +19,11 @@ public class PagePresenter {
 	private String userName;
 	private String token;
 	private String userGreeting;
+	private ErrorMessages messages;
 	private static Logger logger = Logger.getLogger("PagePresenter");
 	
 	public PagePresenter(LoginServiceAsync loginService, GreetingServiceAsync greetingService,
-			PageView view){
+			PageView view, ErrorMessages messages){
 		
 		if(loginService == null){
 			String message = "Constructor: loginService can't be null.";
@@ -35,11 +37,16 @@ public class PagePresenter {
 			String message = "Constructor: view can't be null.";
 			logger.severe(message);
 			throw new IllegalArgumentException(message);
+		}else if(messages == null){
+			String message = "Constructor: messages can't be null.";
+			logger.severe(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		this.loginService = loginService;
 		this.greetingService = greetingService;
 		this.view = view;
+		this.messages = messages;
 		logger.config("PagePresenter created.");
 	}
 	
@@ -150,7 +157,7 @@ public class PagePresenter {
 	
 	private void displayLoginFillingWithServerNotAvaibleMessage(){
 		displayLoginFilling();
-		displayServerNotAvaibleMessageOnLoginFilling();
+		displayServerUnvaibleMessageOnLoginFilling();
 	}
 	
 	private void displayLoginFilling(){
@@ -173,9 +180,10 @@ public class PagePresenter {
 		view.displayLoginFilling();
 	}
 	
-	private void displayServerNotAvaibleMessageOnLoginFilling(){
-		view.displayLoginError(Constants.SERVER_NOT_AVAIBLE);
-		logger.finer("Displayed: message on login filling '" + Constants.SERVER_NOT_AVAIBLE + "'.");
+	private void displayServerUnvaibleMessageOnLoginFilling(){
+		String message = messages.serverUnavaible();
+		view.displayLoginError(message);
+		logger.finer("Displayed: message on login filling '" + message + "'.");
 	}
 		
 	public void logIn(String login, String password){
@@ -192,9 +200,9 @@ public class PagePresenter {
 	}
 	
 	private void showLoginOrPasswordTooShortMessage(){
-		view.displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
-		logger.finer("Displayed: message on login filling '" 
-				+ Constants.LOGIN_OR_PASSWORD_TOO_SHORT + "'.");
+		String message = messages.tooShortLoginOrPassword(Constants.MINIMAL_LENGHT);
+		view.displayLoginError(message);
+		logger.finer("Displayed: message on login filling '" + message + "'.");
 	}
 	
 	private void tryToLoginWithServer(String login, String password){		
@@ -223,14 +231,15 @@ public class PagePresenter {
 		
 		@Override
 		public void onFailure(Throwable caught) {
-			displayServerNotAvaibleMessageOnLoginFilling();
+			displayServerUnvaibleMessageOnLoginFilling();
 			logger.warning("Invoked: loginService.loginServer(...), server unavaible.");
 		}
 	}
 	
 	private void displayWrongLoginOrPasswordMessage(){
-		view.displayLoginError(Constants.INCORRECT_CREDENTIALS);
-		logger.finer("Displayed: message on login filling '" + Constants.INCORRECT_CREDENTIALS+ "'.");
+		String message = messages.wrongLoginOrPassword();
+		view.displayLoginError(message);
+		logger.finer("Displayed: message on login filling '" + message + "'.");
 	}
 	
 	public void executeLogout(){		
@@ -248,12 +257,13 @@ public class PagePresenter {
 		@Override
 		public void onFailure(Throwable caught) {
 			logger.warning("Invoked: loginService.logout(...), server unavaible.");
-			displayServerNotAvaibleMessageOnGreetingFilling();
+			displayServerUnavaibleMessageOnGreetingFilling();
 		}
 	}
 	
-	private void displayServerNotAvaibleMessageOnGreetingFilling(){
-		view.displayLogoutError(Constants.SERVER_NOT_AVAIBLE);
-		logger.finer("Displayed: message on greeting filling '" + Constants.SERVER_NOT_AVAIBLE + "'.");
+	private void displayServerUnavaibleMessageOnGreetingFilling(){
+		String message = messages.serverUnavaible();
+		view.displayLogoutError(message);
+		logger.finer("Displayed: message on greeting filling '" + message + "'.");
 	}
 }

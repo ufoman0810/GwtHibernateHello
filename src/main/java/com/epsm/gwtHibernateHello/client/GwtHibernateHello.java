@@ -7,6 +7,7 @@ import com.epsm.gwtHibernateHello.client.service.GreetingService;
 import com.epsm.gwtHibernateHello.client.service.GreetingServiceAsync;
 import com.epsm.gwtHibernateHello.client.service.LoginService;
 import com.epsm.gwtHibernateHello.client.service.LoginServiceAsync;
+import com.epsm.gwtHibernateHello.client.view.ErrorMessages;
 import com.epsm.gwtHibernateHello.client.view.Page;
 import com.epsm.gwtHibernateHello.client.view.PageView;
 import com.google.gwt.core.client.EntryPoint;
@@ -17,13 +18,15 @@ public class GwtHibernateHello implements EntryPoint {
 	private GreetingServiceAsync greetingService;
 	private PageView page = new Page();
 	private PagePresenter presenter;
+	private ErrorMessages messages;
 	private static Logger logger = Logger.getLogger("GwtHibernateHello");
 	
 	public GwtHibernateHello() {
 		loginService = GWT.create(LoginService.class);
 		greetingService = GWT.create(GreetingService.class);
 		page = new Page();
-		presenter = new PagePresenter(loginService, greetingService, page);
+		messages = GWT.create(ErrorMessages.class);
+		presenter = new PagePresenter(loginService, greetingService, page, messages);
 		logger = Logger.getLogger("GwtHibernateHello");
 		
 		page.setPresenter(presenter);

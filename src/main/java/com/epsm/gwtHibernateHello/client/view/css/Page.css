@@ -42,7 +42,7 @@
 	float: left;
 }
 		
-.error {
+.loginError {
 	color: red;
 	text-align: center;
 }
@@ -79,6 +79,11 @@
 .logoutErrorsContainer {
 	width: 200px;
 	float: left;
+}
+
+.logoutError{
+	color: red;
+	text-align: left;
 }
   
 .footer {

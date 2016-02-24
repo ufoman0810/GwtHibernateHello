@@ -14,7 +14,7 @@
 		<gwt:HTMLPanel>
 			<div id="loginFilling" class="{style.loginContainer}">
 				<div class="{style.loginErrorsContainer">
-					<gwt:Label ui:field="loginErrorLabel" resources:styleName="{style.error}"/>
+					<gwt:Label ui:field="loginErrorLabel" resources:styleName="{style.loginError}"/>
 				</div>
 				<div class="{style.inputContainer}">
 					<div class="{style.labelsContainer}">
@@ -44,7 +44,7 @@
 					</gwt:Label>
 				</div>  
 				<div class="{style.logoutErrorsContainer}">
-					<gwt:Label ui:field="logoutErrorLabel" resources:styleName="{style.error}"/>
+					<gwt:Label ui:field="logoutErrorLabel" resources:styleName="{style.logoutError}"/>
 				</div>  
         	</div>
 		</gwt:HTMLPanel>

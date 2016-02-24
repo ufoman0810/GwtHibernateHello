@@ -1,5 +1,6 @@
 package com.epsm.gwtHibernateHello.client.presenter;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
@@ -26,6 +27,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.epsm.gwtHibernateHello.client.service.GreetingServiceAsync;
 import com.epsm.gwtHibernateHello.client.service.LoginServiceAsync;
+import com.epsm.gwtHibernateHello.client.view.ErrorMessages;
 import com.epsm.gwtHibernateHello.client.view.PageView;
 import com.epsm.gwtHibernateHello.shared.Constants;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
@@ -38,6 +40,7 @@ public class PagePresenterTest {
 	private LoginServiceAsync loginService;
 	private GreetingServiceAsync greetingService;
 	private PageView view;
+	private ErrorMessages messages;
 	private PagePresenter presenter;
 	private final String USERNAME = "John";
 	private final String TOKEN = "someToken";
@@ -46,14 +49,22 @@ public class PagePresenterTest {
 	private final String PASSWORD = "somePassword";
 	private final String TOO_SHORT_PASSWORD = "123";
 	private final String TOO_SHORT_LOGIN = "abc";
+	private final String MESSAGE_SERVER_UNAVAIBLE = "server_uanavaible";
+	private final String MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD = "login_or_password_too_short";
+	private final String MESSAGE_WRONG_LOGIN_OR_PASSSWORD = "wrong_login_or_password";
 	
 	@Before
 	public void setUp(){
 		loginService = mock(LoginServiceAsync.class);
 		greetingService = mock(GreetingServiceAsync.class);
 		view = mock(PageView.class);
-		presenter = new PagePresenter(loginService, greetingService, view);
+		messages = mock(ErrorMessages.class);
+		presenter = new PagePresenter(loginService, greetingService, view, messages);
 		PowerMockito.mockStatic(Cookies.class);
+		
+		when(messages.serverUnavaible()).thenReturn(MESSAGE_SERVER_UNAVAIBLE);
+		when(messages.tooShortLoginOrPassword(anyInt())).thenReturn(MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD);
+		when(messages.wrongLoginOrPassword()).thenReturn(MESSAGE_WRONG_LOGIN_OR_PASSSWORD);
 	}
 	
 	@Rule
@@ -64,7 +75,7 @@ public class PagePresenterTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Constructor: loginService can't be null.");
 	    
-	    new PagePresenter(null, greetingService,  view);
+	    new PagePresenter(null, greetingService,  view, messages);
 	}
 	
 	@Test
@@ -72,7 +83,7 @@ public class PagePresenterTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Constructor: greetingService can't be null.");
 	    
-	    new PagePresenter(loginService, null, view);
+	    new PagePresenter(loginService, null, view, messages);
 	}
 	
 	@Test
@@ -80,7 +91,15 @@ public class PagePresenterTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Constructor: view can't be null.");
 	    
-	    new PagePresenter(loginService, greetingService, null);
+	    new PagePresenter(loginService, greetingService, null, messages);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfMessagesIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("Constructor: messages can't be null.");
+	    
+	    new PagePresenter(loginService, greetingService, view, null);
 	}
 	
 	@Test
@@ -151,7 +170,7 @@ public class PagePresenterTest {
 		presenter.showPage();
 		
 		verify(view).displayLoginFilling();
-		verify(view).displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLoginError(MESSAGE_SERVER_UNAVAIBLE);
 	}
 	
 	private void makeLoginServerNotAvaible(){
@@ -178,7 +197,7 @@ public class PagePresenterTest {
 		presenter.showPage();
 		
 		verify(view).displayLoginFilling();
-		verify(view).displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLoginError(MESSAGE_SERVER_UNAVAIBLE);
 	}
 	
 	private void makeTokenLegalOnLoginServerWithIsSessionStillLegalMethod(){
@@ -306,7 +325,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
-		verify(view).displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLoginError(MESSAGE_SERVER_UNAVAIBLE);
 	}
 	
 	@Test
@@ -315,7 +334,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
-		verify(view).displayLoginError(Constants.INCORRECT_CREDENTIALS);
+		verify(view).displayLoginError(MESSAGE_WRONG_LOGIN_OR_PASSSWORD);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -336,7 +355,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
-		verify(view).displayLoginError(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLoginError(MESSAGE_SERVER_UNAVAIBLE);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -357,7 +376,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(TOO_SHORT_LOGIN, PASSWORD);
 		
-		verify(view).displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+		verify(view).displayLoginError(MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD);
 	}
 	
 	@Test
@@ -367,7 +386,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, TOO_SHORT_PASSWORD);
 		
-		verify(view).displayLoginError(Constants.LOGIN_OR_PASSWORD_TOO_SHORT);
+		verify(view).displayLoginError(MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD);
 	}
 	
 	@Test
@@ -387,7 +406,7 @@ public class PagePresenterTest {
 		
 		presenter.executeLogout();
 		
-		verify(view).displayLogoutError(Constants.SERVER_NOT_AVAIBLE);
+		verify(view).displayLogoutError(MESSAGE_SERVER_UNAVAIBLE);
 	}
 	
 	@SuppressWarnings("unchecked")
