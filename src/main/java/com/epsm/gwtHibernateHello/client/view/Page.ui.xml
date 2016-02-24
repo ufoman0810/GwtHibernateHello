@@ -1,6 +1,9 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:gwt="urn:import:com.google.gwt.user.client.ui" 
-	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources">
+	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources"
+	ui:generateFormat="com.google.gwt.i18n.rebind.format.PropertiesFormat"
+	ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+	ui:generateLocales="default">
 	<ui:with type="com.epsm.gwtHibernateHello.client.view.Resources" field="resources"/>
 	<ui:style src="css/Page.css"/>
 
@@ -15,13 +18,19 @@
 				</div>
 				<div class="{style.inputContainer}">
 					<div class="{style.labelsContainer}">
-						<gwt:Label text="Login:" resources:styleName="{style.label}"/>
-						<gwt:Label text="Password:" resources:styleName="{style.label}"/>
+						<gwt:Label resources:styleName="{style.label}">
+							<ui:msg description="loginLabel">Login:</ui:msg>
+						</gwt:Label>
+						<gwt:Label resources:styleName="{style.label}">
+							<ui:msg description="passwordLabel">Password:</ui:msg>
+						</gwt:Label>
 					</div>     
 					<div class="{style.fields}">     
 						<gwt:TextBox ui:field="loginBox"/>
 						<gwt:PasswordTextBox ui:field="passwordBox"/>
-						<gwt:Button ui:field="buttonLogin" text="Login"/>
+						<gwt:Button ui:field="buttonLogin">
+							<ui:msg description="ButtonLogin">Log in</ui:msg>
+						</gwt:Button>
 					</div>
 				</div>
         	</div>
@@ -30,7 +39,9 @@
 					<gwt:Label ui:field="greetingLabel" resources:styleName="{style.label}"/>
 				</div>  
 				<div class="{style.logoutContainer}">
-					<gwt:Label ui:field="logoutLink" resources:styleName="{style.logoutLink}" text="Logout from system"/>
+					<gwt:Label ui:field="logoutLink" resources:styleName="{style.logoutLink}">
+						<ui:msg description="LogoutLink">Log out from system</ui:msg>
+					</gwt:Label>
 				</div>  
 				<div class="{style.logoutErrorsContainer}">
 					<gwt:Label ui:field="logoutErrorLabel" resources:styleName="{style.error}"/>
