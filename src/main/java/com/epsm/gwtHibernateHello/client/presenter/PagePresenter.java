@@ -109,6 +109,7 @@ public class PagePresenter {
 	private void tryToGetGreetingFromGreetingServer(){
 		Date timeSource = getCurrentDate();
 		greetingService.getGreeting(timeSource, token, new GetGreetingRequest());
+		logger.finer("Invoked: greetingService.GetGreetingRequest(" + timeSource + ",...).");
 	}
 	
 	private Date getCurrentDate(){

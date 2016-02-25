@@ -35,8 +35,8 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 			logger.warn("Attempt: get greeting with null Date from: {}.", getRemoteAddr());
 			return null;
 		}else if(isTokenCorrect(token)){
-			logger.info("Prepearing: greeting for user with login: {} from: {}.",
-					getUserLogin(), getRemoteAddr());
+			logger.info("Prepearing: greeting for user with login: {}, date: {}, from: {}.",
+					getUserLogin(), timeSource, getRemoteAddr());
 			return createMessage(timeSource);
 		}else{
 			logger.warn("Denied: getting greeting with wrong token from: {}.", getRemoteAddr());
