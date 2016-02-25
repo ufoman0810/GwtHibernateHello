@@ -10,33 +10,33 @@
 
 	<appender name="hello-module" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-10([%thread]) %-30(%logger{30}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${catalina.base}/logs/GwtHibernateHello/hello-module.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>${logging.destination}/GwtHibernateHello/hello-module.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 	
 	<appender name="security" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-10([%thread]) %-30(%logger{30}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${catalina.base}/logs/GwtHibernateHello/security.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>${logging.destination}/GwtHibernateHello/security.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 	
 	<appender name="application" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-10([%thread]) %-30(%logger{30}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${catalina.base}/logs/GwtHibernateHello/application.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>${logging.destination}/GwtHibernateHello/application.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
