@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.epsm</groupId>
 	<artifactId>gwt-hibernate-hello</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>second test task</name>
 
@@ -18,13 +18,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<sql.script.path>
-			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/runtime/dependencies/script.sql
+			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/configuration/script.sql
 		</sql.script.path>
 		<messages.localizations.path>
-			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/runtime/dependencies/GreetingLocalizations/
+			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/GreetingLocalizations/
 		</messages.localizations.path>
 		<logging.destination>
-			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/logs
+			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/logs
 		</logging.destination>
 	</properties>
 
@@ -137,7 +137,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 				<configuration>
 					<warName>ROOT</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
