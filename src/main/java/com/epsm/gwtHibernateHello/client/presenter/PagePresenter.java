@@ -9,6 +9,7 @@ import com.epsm.gwtHibernateHello.client.view.ErrorMessages;
 import com.epsm.gwtHibernateHello.client.view.PageView;
 import com.epsm.gwtHibernateHello.shared.Constants;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,25 +21,26 @@ public class PagePresenter {
 	private String token;
 	private String userGreeting;
 	private ErrorMessages messages;
+	private DateTimeFormat formatter;
 	private static Logger logger = Logger.getLogger("PagePresenter");
 	
 	public PagePresenter(LoginServiceAsync loginService, GreetingServiceAsync greetingService,
 			PageView view, ErrorMessages messages){
 		
 		if(loginService == null){
-			String message = "Constructor: loginService can't be null.";
+			String message = "Constructor: LoginServiceAsync can't be null.";
 			logger.severe(message);
 			throw new IllegalArgumentException(message);
 		}else if(greetingService == null){
-			String message = "Constructor: greetingService can't be null.";
+			String message = "Constructor: GreetingServiceAsync can't be null.";
 			logger.severe(message);
 			throw new IllegalArgumentException(message);
 		}else if(view == null){
-			String message = "Constructor: view can't be null.";
+			String message = "Constructor: PageView can't be null.";
 			logger.severe(message);
 			throw new IllegalArgumentException(message);
 		}else if(messages == null){
-			String message = "Constructor: messages can't be null.";
+			String message = "Constructor: ErrorMessages can't be null.";
 			logger.severe(message);
 			throw new IllegalArgumentException(message);
 		}
@@ -47,6 +49,7 @@ public class PagePresenter {
 		this.greetingService = greetingService;
 		this.view = view;
 		this.messages = messages;
+		formatter = DateTimeFormat.getFormat(Constants.TIME_PATTERN);
 		logger.config("PagePresenter created.");
 	}
 	
@@ -108,8 +111,9 @@ public class PagePresenter {
 	
 	private void tryToGetGreetingFromGreetingServer(){
 		Date timeSource = getCurrentDate();
-		greetingService.getGreeting(timeSource, token, new GetGreetingRequest());
-		logger.finer("Invoked: greetingService.GetGreetingRequest(" + timeSource + ",...).");
+		String timeAsString = formatter.format(timeSource);
+		greetingService.getGreeting(timeAsString, token, new GetGreetingRequest());
+		logger.finer("Invoked: greetingService.GetGreetingRequest(" + timeAsString + ",...).");
 	}
 	
 	private Date getCurrentDate(){

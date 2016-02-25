@@ -1,7 +1,5 @@
 package com.epsm.gwtHibernateHello.client.service;
 
-import java.util.Date;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -10,7 +8,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 public class GreetingServiceAsyncTest extends GWTTestCase{
 	private GreetingServiceAsync greetingService;
 	private final int RPC_TIMEOUT = 10_000;
-	private final Date TIMESOURCE = new Date();
+	private final String TIME = "12-34-56";
 	private final String TOKEN = "someToken";
 	
 	@Override
@@ -31,7 +29,7 @@ public class GreetingServiceAsyncTest extends GWTTestCase{
 	}
 	
 	private void executeGetMessageForTime(){
-		greetingService.getGreeting(TIMESOURCE, TOKEN, new AsyncCallback<String>() {
+		greetingService.getGreeting(TIME, TOKEN, new AsyncCallback<String>() {
 			
 			@Override
 			public void onSuccess(String result) {

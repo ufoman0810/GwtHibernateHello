@@ -7,11 +7,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +39,6 @@ public class GreetingServiceImplTest {
 	private UserDTO userDto;
 	private Locale actualLocale;
 	private LocalTime actualTime;
-	private LocalTime expextedTime;
 	private Message message;
 	private ArgumentCaptor<Locale> localeCaptor;
 	private ArgumentCaptor<LocalTime> timeCaptor;
@@ -50,7 +46,8 @@ public class GreetingServiceImplTest {
 	private final String RIGHT_TOKEN = "someToken";
 	private final String WRONG_TOKEN = "wrongToken";
 	private final String GREETING = "greetingMessage";
-	private final Date TIME_SOURCE = new Date();
+	private final String TIME = "12-34-56";
+	private LocalTime EXPECTED_TIME = LocalTime.of(12, 34, 56);
 	
 	@Before
 	public void setUp(){
@@ -64,6 +61,7 @@ public class GreetingServiceImplTest {
 		PowerMockito.mockStatic(Configuration.class);
 		when(Configuration.getMesageFactory()).thenReturn(messageFactory);
 		service = spy(new GreetingServiceImpl());
+		PowerMockito.mockStatic(DateTimeFormatter.class);
 		
 		userDto.setToken(RIGHT_TOKEN);
 		when(service.getRequest()).thenReturn(request);
@@ -93,7 +91,7 @@ public class GreetingServiceImplTest {
 	}
 	
 	private void tryToGetGreetingWithWrongToken(){
-		greeting = service.getGreeting(TIME_SOURCE, WRONG_TOKEN);
+		greeting = service.getGreeting(TIME, WRONG_TOKEN);
 	}
 	
 	@Test
@@ -101,25 +99,19 @@ public class GreetingServiceImplTest {
 		makeServiceReturnGreeting();
 		
 		captureParameters();
-		calculateExpectedTime(TIME_SOURCE);
 		
-		Assert.assertEquals(expextedTime, actualTime);
+		Assert.assertEquals(EXPECTED_TIME, actualTime);
 		Assert.assertTrue(LOCALE == actualLocale);
 	}
 	
 	private void makeServiceReturnGreeting(){
-		greeting = service.getGreeting(TIME_SOURCE, RIGHT_TOKEN);
+		greeting = service.getGreeting(TIME, RIGHT_TOKEN);
 	}
 	
 	private void captureParameters(){
 		verify(messageFactory).getMessage(localeCaptor.capture(), timeCaptor.capture());
 		actualTime = timeCaptor.getValue();
 		actualLocale = localeCaptor.getValue();
-	}
-	
-	private void calculateExpectedTime(Date timeSource){
-		Instant instant = Instant.ofEpochMilli(timeSource.getTime());
-		expextedTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime();
 	}
 	
 	@Test

@@ -31,17 +31,19 @@ import com.epsm.gwtHibernateHello.client.view.ErrorMessages;
 import com.epsm.gwtHibernateHello.client.view.PageView;
 import com.epsm.gwtHibernateHello.shared.Constants;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Cookies.class)
+@PrepareForTest({Cookies.class, DateTimeFormat.class})
 public class PagePresenterTest {
 	private LoginServiceAsync loginService;
 	private GreetingServiceAsync greetingService;
 	private PageView view;
 	private ErrorMessages messages;
 	private PagePresenter presenter;
+	private DateTimeFormat formatter;
 	private final String USERNAME = "John";
 	private final String TOKEN = "someToken";
 	private final String GREETING = "Hello";
@@ -52,6 +54,7 @@ public class PagePresenterTest {
 	private final String MESSAGE_SERVER_UNAVAIBLE = "server_uanavaible";
 	private final String MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD = "login_or_password_too_short";
 	private final String MESSAGE_WRONG_LOGIN_OR_PASSSWORD = "wrong_login_or_password";
+	private final String TIME = "12-34-56";
 	
 	@Before
 	public void setUp(){
@@ -59,12 +62,16 @@ public class PagePresenterTest {
 		greetingService = mock(GreetingServiceAsync.class);
 		view = mock(PageView.class);
 		messages = mock(ErrorMessages.class);
-		presenter = new PagePresenter(loginService, greetingService, view, messages);
+		PowerMockito.mockStatic(DateTimeFormat.class);
+		formatter = mock(DateTimeFormat.class);
+		when(DateTimeFormat.getFormat(Constants.TIME_PATTERN)).thenReturn(formatter);
 		PowerMockito.mockStatic(Cookies.class);
+		presenter = new PagePresenter(loginService, greetingService, view, messages);
 		
 		when(messages.serverUnavaible()).thenReturn(MESSAGE_SERVER_UNAVAIBLE);
 		when(messages.tooShortLoginOrPassword(anyInt())).thenReturn(MESSAGE_TOO_SHORT_LOGIN_OR_PASSSWORD);
 		when(messages.wrongLoginOrPassword()).thenReturn(MESSAGE_WRONG_LOGIN_OR_PASSSWORD);
+		when(formatter.format(isA(Date.class))).thenReturn(TIME);
 	}
 	
 	@Rule
@@ -73,15 +80,15 @@ public class PagePresenterTest {
 	@Test
 	public void exceptionInConstructorIfloginServiceIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: loginService can't be null.");
+	    expectedEx.expectMessage("Constructor: LoginServiceAsync can't be null.");
 	    
-	    new PagePresenter(null, greetingService,  view, messages);
+	    new PagePresenter(null, greetingService, view, messages);
 	}
 	
 	@Test
 	public void exceptionInConstructorIfGreetingServicIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: greetingService can't be null.");
+	    expectedEx.expectMessage("Constructor: GreetingServiceAsync can't be null.");
 	    
 	    new PagePresenter(loginService, null, view, messages);
 	}
@@ -89,7 +96,7 @@ public class PagePresenterTest {
 	@Test
 	public void exceptionInConstructorIfViewIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: view can't be null.");
+	    expectedEx.expectMessage("Constructor: PageView can't be null.");
 	    
 	    new PagePresenter(loginService, greetingService, null, messages);
 	}
@@ -97,11 +104,11 @@ public class PagePresenterTest {
 	@Test
 	public void exceptionInConstructorIfMessagesIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("Constructor: messages can't be null.");
+	    expectedEx.expectMessage("Constructor: ErrorMessages can't be null.");
 	    
 	    new PagePresenter(loginService, greetingService, view, null);
 	}
-	
+
 	@Test
 	@SuppressWarnings("unchecked")
 	public void showPageMethodDoesNotTryCheckWithServerIfSessionStillLegalIfThereIsNoInCookies(){
@@ -117,7 +124,7 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void displaysLoginFillingWithoutErrorIfTokenNotExistsInCookies(){
+	public void displaysLoginFillingWithoutErrorIfTokenNotExistsInCookiesWithShowPageMethod(){
 		makeTokenNotExistInCookies();
 		
 		presenter.showPage();
@@ -127,7 +134,7 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void displaysLoginFillingWithoutErrorIfSessionNotLegalOnLoginServer(){
+	public void displaysLoginFillingWithoutErrorIfSessionNotLegalOnLoginServerWithShowPageMethod(){
 		makeTokenNotLegalOnLoginServer();
 		
 		presenter.showPage();
@@ -164,7 +171,7 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void displaysLoginFillingWithServerErrorIfLoginServerIsNotAvaible(){
+	public void displaysLoginFillingWithServerErrorIfLoginServerIsNotAvaibleWithShowPageMethod(){
 		makeLoginServerNotAvaible();
 		
 		presenter.showPage();
@@ -190,7 +197,7 @@ public class PagePresenterTest {
 	}
 	
 	@Test
-	public void displaysLoginFillingWithServerErrorIfSessionIsLegalButGreetingServiceIsNotAvaible(){
+	public void displaysLoginFillingWithServerErrorIfSessionIsLegalButGreetingServiceUtAvaibleWithShowPageMethod(){
 		makeTokenLegalOnLoginServerWithIsSessionStillLegalMethod();
 		makeGreetingServiceNotAvaible();
 		
@@ -233,7 +240,7 @@ public class PagePresenterTest {
 				callback.onFailure(new Throwable());
 				return null;
 			}
-		}).when(greetingService).getGreeting(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
+		}).when(greetingService).getGreeting(eq(TIME), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
@@ -254,7 +261,7 @@ public class PagePresenterTest {
 				callback.onSuccess(GREETING);
 				return null;
 			}
-		}).when(greetingService).getGreeting(isA(Date.class), eq(TOKEN), isA(AsyncCallback.class));
+		}).when(greetingService).getGreeting(eq(TIME), eq(TOKEN), isA(AsyncCallback.class));
 	}
 	
 	@Test
@@ -459,7 +466,7 @@ public class PagePresenterTest {
 		
 		presenter.logIn(LOGIN, PASSWORD);
 		
-		verify(greetingService).getGreeting(isA(Date.class), eq(TOKEN),
+		verify(greetingService).getGreeting(eq(TIME), eq(TOKEN),
 				isA(AsyncCallback.class));
 	}
 	
@@ -472,5 +479,22 @@ public class PagePresenterTest {
 		presenter.executeLogout();
 		
 		verify(loginService).logout(eq(TOKEN), isA(AsyncCallback.class));
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void whenDoingRequestToGreetingServicePassesTheSameStringThatWasReturnedByFormatter(){
+		makePresenterDoingRequestToGreetingService();
+		
+		verify(greetingService).getGreeting(eq(TIME), eq(TOKEN), isA(AsyncCallback.class));
+	}
+	
+	private void makePresenterDoingRequestToGreetingService(){
+		makeLoginServiceReturnLoggedInUserDTOWithLoginWithServerMethod();
+		makePresenterGetMessageForRegisteredUser();
+	}
+	
+	private void makePresenterGetMessageForRegisteredUser(){
+		presenter.logIn(LOGIN, PASSWORD);
 	}
 }
