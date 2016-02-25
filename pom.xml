@@ -16,16 +16,6 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<sql.script.path>
-			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/configuration/script.sql
-		</sql.script.path>
-		<messages.localizations.path>
-			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/GreetingLocalizations/
-		</messages.localizations.path>
-		<logging.destination>
-			/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/logs
-		</logging.destination>
 	</properties>
 
 	<repositories>
@@ -169,4 +159,34 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<sql.script.path>/var/lib/tomcat8/webapps/ROOT/configuration/script.sql</sql.script.path>
+				<messages.localizations.path>/var/lib/tomcat8/webapps/ROOT/GreetingLocalizations/</messages.localizations.path>
+				<logging.destination>${catalina.base}/logs</logging.destination>
+			</properties>
+		</profile>
+		<profile>
+			<id>rhcloud</id>
+			<properties>
+				<sql.script.path>
+					/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/configuration/script.sql
+				</sql.script.path>
+				<messages.localizations.path>
+					/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/webapps/ROOT/GreetingLocalizations/
+				</messages.localizations.path>
+				<logging.destination>
+					/var/lib/openshift/56ce745489f5cf45d600021f/app-root/data/apache-tomcat-8.0.32/logs
+				</logging.destination>
+			</properties>
+		</profile>
+	</profiles>
 </project>
