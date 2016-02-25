@@ -4,13 +4,13 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} %-5level %-23([%thread]) %-47(%logger{48}) - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %-40([%thread]) %-38(%logger{35}) - %msg%n</pattern>
 		</encoder>
 	</appender>
 
 	<appender name="hello-module" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-40([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -21,7 +21,7 @@
 	
 	<appender name="security" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-40([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -32,7 +32,7 @@
 	
 	<appender name="application" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-36([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-40([%thread]) %-38(%logger{35}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
