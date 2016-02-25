@@ -16,7 +16,6 @@ public class UserTest {
 		user.setLogin(LOGIN);
 		
 		actualString = user.toString();
-		System.out.println(actualString);
 		
 		Assert.assertEquals(EXPECTED_STRING, actualString);
 	}

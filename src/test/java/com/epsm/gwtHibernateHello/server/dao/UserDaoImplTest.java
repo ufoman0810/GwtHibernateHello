@@ -22,6 +22,8 @@ public class UserDaoImplTest extends DBTestCase{
 	private final String EXISTS_LOGIN_IN_TEST_DB = "nk";
 	private final String NOT_EXISTS_LOGIN_IN_TEST_DB = "notExistsLogin";
 	private final String EXISTS_LOGIN_IN_SCRIPT_FILE = "john";
+	private final String TEST_DB_PATH = "src/test/resources/testDb.xml";
+	private final String CONFIGURATION_SQL_SCRIPT_PATH = "configuration/script.sql";
 	
 	public UserDaoImplTest(){
         System.setProperty(PropertiesBasedJdbcDatabaseTester
@@ -32,8 +34,7 @@ public class UserDaoImplTest extends DBTestCase{
 	
 	@Override
 	protected IDataSet getDataSet() throws Exception {
-		return new FlatXmlDataSetBuilder().build(new FileInputStream(
-				"src/test/resources/testDb.xml"));
+		return new FlatXmlDataSetBuilder().build(new FileInputStream(TEST_DB_PATH));
 	}
 	
 	@Test
@@ -61,7 +62,7 @@ public class UserDaoImplTest extends DBTestCase{
 	}
 	
 	private String prepareScript() throws IOException{
-		byte[] encoded = Files.readAllBytes(Paths.get("src/main/resources/script.sql"));
+		byte[] encoded = Files.readAllBytes(Paths.get(CONFIGURATION_SQL_SCRIPT_PATH));
 		
 		return new String(encoded, Charset.forName("UTF-8"));
 	}

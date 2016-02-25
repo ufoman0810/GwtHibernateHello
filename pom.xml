@@ -16,6 +16,16 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<sql.script.path>
+			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/runtime/dependencies/script.sql
+		</sql.script.path>
+		<messages.localizations.path>
+			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/runtime/dependencies/GreetingLocalizations/
+		</messages.localizations.path>
+		<logging.destination>
+			/var/lib/openshift/56ce3a830c1e66c73b000018/app-root/logs
+		</logging.destination>
 	</properties>
 
 	<repositories>
@@ -70,7 +80,7 @@
 		<!-- hello. first test task -->
 		<dependency>
 			<groupId>com.github.epsm-test</groupId>
-			<artifactId>Hello</artifactId>
+			<artifactId>hello</artifactId>
 			<version>0.0.1</version>
 		</dependency>
     
@@ -99,6 +109,12 @@
 	<build>
     	<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -117,6 +133,26 @@
 						<module>com.epsm.gwtHibernateHello.GwtHibernateHello</module>
 					</modules>
 					<sourceLevel>1.7</sourceLevel>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<warName>ROOT</warName>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>configuration</directory>
+							<targetPath>configuration</targetPath>
+							<filtering>true</filtering>
+						</resource>
+						<resource>
+							<directory>GreetingLocalizations</directory>
+							<targetPath>GreetingLocalizations</targetPath>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 			<plugin>

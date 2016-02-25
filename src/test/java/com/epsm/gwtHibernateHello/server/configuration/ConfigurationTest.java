@@ -60,4 +60,34 @@ public class ConfigurationTest {
 		
 		Assert.assertTrue(messageFactory_1 == messageFactory_2);
 	}
+	
+	@Test
+	public void getLocalizationsPathMethodReturnsNotNullMessageFactory(){
+		String localizationPath = Configuration.getLocalizationsPath();
+		
+		Assert.assertNotNull(localizationPath);
+	}
+	
+	@Test
+	public void getLocalizationsPathMethodReturnsTheSameInstanceEachTime(){
+		String localizationPath_1 = Configuration.getLocalizationsPath();
+		String localizationPath_2 = Configuration.getLocalizationsPath();
+		
+		Assert.assertEquals(localizationPath_1, localizationPath_2);
+	}
+	
+	@Test
+	public void getSqlScriptPathMethodReturnsNotNullMessageFactory(){
+		String localizationPath = Configuration.getSqlScriptPath();
+		
+		Assert.assertNotNull(localizationPath);
+	}
+	
+	@Test
+	public void getSqlScriptPathMethodReturnsTheSameInstanceEachTime(){
+		String sqlScriptPath_1 = Configuration.getSqlScriptPath();
+		String sqlScriptPath_2 = Configuration.getSqlScriptPath();
+		
+		Assert.assertEquals(sqlScriptPath_1, sqlScriptPath_2);
+	}
 }
