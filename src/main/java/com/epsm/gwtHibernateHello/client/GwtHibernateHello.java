@@ -36,7 +36,7 @@ public class GwtHibernateHello implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		logger.fine("Requested: GwtHibernateHello module.");
-		presenter.showPage();
+		//presenter.showPage();
 	}
 
 }

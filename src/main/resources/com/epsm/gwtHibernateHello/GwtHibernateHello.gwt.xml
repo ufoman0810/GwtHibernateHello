@@ -19,7 +19,7 @@
 	<extend-property name="locale" values="ru"/>
 	<set-property name="locale" value="en,ru"/>
 	<set-property-fallback name="locale" value="en"/>
-	<set-configuration-property name="locale.useragent" value="Y"/>
+	<set-configuration-property name="locale.usemeta" value="Y"/>
     
 	<servlet path="/GwtHibernateHello/login" class="com.epsm.gwtHibernateHello.server.service.LoginServiceImpl" />
 	<servlet path="/GwtHibernateHello/greeting" class="com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl" />
