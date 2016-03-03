@@ -21,4 +21,8 @@
 		<servlet-name>greetingServlet</servlet-name>
 		<url-pattern>/GwtHibernateHello/greeting</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>jsp</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
 </web-app>
