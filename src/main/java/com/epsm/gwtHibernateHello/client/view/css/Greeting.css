@@ -1,0 +1,42 @@
+.greeting {
+	width: 200px;
+	padding: 20px;
+	text-align: left;
+}
+
+.labelContainer {
+	width: 200px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.label {
+	text-align: left;
+	margin-top: 7px;
+}
+
+.logoutContainer {
+	width: 200px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.logoutLink{
+	text-decoration: underline;
+	color: blue;
+}
+
+.logoutLink:HOVER{
+	text-decoration: underline;
+	color: DarkMagenta;
+}
+
+.errorsContainer {
+	width: 200px;
+	float: left;
+}
+
+.logoutError{
+	color: red;
+	text-align: left;
+}

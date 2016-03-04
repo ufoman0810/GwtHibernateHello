@@ -1,0 +1,33 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:gwt="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:resources="urn:with:com.epsm.gwtHibernateHello.client.page.Resources"
+	ui:generateFormat="com.google.gwt.i18n.rebind.format.PropertiesFormat"
+	ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+	ui:generateLocales="default">
+	<ui:style src="css/Login.css"/>
+
+	<gwt:HTMLPanel>
+		<div class="{style.login}">
+			<div class="{style.errorsContainer">
+				<gwt:Label ui:field="errorLabel" resources:styleName="{style.errorLabel}"/>
+			</div>
+			<div class="{style.inputContainer}">
+				<div class="{style.labelsContainer}">
+					<gwt:Label resources:styleName="{style.label}">
+						<ui:msg description="loginLabel">Login:</ui:msg>
+					</gwt:Label>
+					<gwt:Label resources:styleName="{style.label}">
+						<ui:msg description="passwordLabel">Password:</ui:msg>
+					</gwt:Label>
+				</div>     
+				<div class="{style.fields}">     
+					<gwt:TextBox ui:field="loginBox"/>
+					<gwt:PasswordTextBox ui:field="passwordBox"/>
+					<gwt:Button ui:field="buttonLogin">
+						<ui:msg description="ButtonLogin">Log in</ui:msg>
+					</gwt:Button>
+				</div>
+			</div>
+       	</div>
+	</gwt:HTMLPanel>
+</ui:UiBinder> 

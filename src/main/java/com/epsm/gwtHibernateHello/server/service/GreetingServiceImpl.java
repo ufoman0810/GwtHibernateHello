@@ -1,6 +1,5 @@
 package com.epsm.gwtHibernateHello.server.service;
 
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -45,14 +44,18 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	}
 	
 	private String createMessage(String timeAsString){
+		StringBuilder builder = new StringBuilder();
 		Locale locale = getRequestLocale();
 		LocalTime time = LocalTime.parse(timeAsString, formatter);
 		Message	message = messageFactory.getMessage(locale, time);
-		String greetingMessage = message.toLocalizedString();
+		builder.append(message.toLocalizedString());
+		builder.append(", ");
+		builder.append(getUserDTOfromSession().getName());
+		builder.append(".");
 		logger.debug("Invoked: createMessage(...) for timeAsString: {}, Locale: {}, returned: {}.",
-				timeAsString, locale, greetingMessage);
+				timeAsString, locale, builder.toString());
 
-		return greetingMessage;
+		return builder.toString();
 	}
 	
 	private Locale getRequestLocale(){

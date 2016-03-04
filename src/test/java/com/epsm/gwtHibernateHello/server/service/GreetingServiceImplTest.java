@@ -45,9 +45,11 @@ public class GreetingServiceImplTest {
 	private final Locale LOCALE = PowerMockito.mock(Locale.class);
 	private final String RIGHT_TOKEN = "someToken";
 	private final String WRONG_TOKEN = "wrongToken";
+	private final String USER_NAME = "someName";
 	private final String GREETING = "greetingMessage";
 	private final String TIME = "12-34-56";
-	private LocalTime EXPECTED_TIME = LocalTime.of(12, 34, 56);
+	private final LocalTime EXPECTED_TIME = LocalTime.of(12, 34, 56);
+	private final String EXPECTED_GREETING = GREETING + ", " + USER_NAME + ".";
 	
 	@Before
 	public void setUp(){
@@ -64,6 +66,7 @@ public class GreetingServiceImplTest {
 		PowerMockito.mockStatic(DateTimeFormatter.class);
 		
 		userDto.setToken(RIGHT_TOKEN);
+		userDto.setName(USER_NAME);
 		when(service.getRequest()).thenReturn(request);
 		when(request.getLocale()).thenReturn(LOCALE);
 		when(request.getSession()).thenReturn(session);
@@ -118,6 +121,6 @@ public class GreetingServiceImplTest {
 	public void getGreetingForTimeMethodReturnsTheSameMessageThatObtainFromFactory(){
 		makeServiceReturnGreeting();
 		
-		Assert.assertEquals(GREETING, greeting);
+		Assert.assertEquals(EXPECTED_GREETING, greeting);
 	}
 }
