@@ -77,25 +77,14 @@ public class GreetingServiceImplTest {
 	}
 	
 	@Test
-	public void getGreetingForTimeMethodReturnsNullIfDateIsNull(){
-		tryGetGreetingWithNullDate();
+	public void getGreetingForTimeMethodReturnsNullIfTokenIsCorrectAndTimeAsStringIsNull(){
+		tryGetGreetingWithNullTimeAsString();
 		
 		Assert.assertNull(greeting);
 	}
 	
-	private void tryGetGreetingWithNullDate(){
+	private void tryGetGreetingWithNullTimeAsString(){
 		greeting = service.getGreeting(null, RIGHT_TOKEN);
-	}
-	
-	@Test
-	public void getGreetingForTimeMethodReturnsNullIfTokenWrong(){		
-		tryToGetGreetingWithWrongToken();
-		
-		Assert.assertNull(greeting);
-	}
-	
-	private void tryToGetGreetingWithWrongToken(){
-		greeting = service.getGreeting(TIME, WRONG_TOKEN);
 	}
 	
 	@Test
@@ -119,9 +108,20 @@ public class GreetingServiceImplTest {
 	}
 	
 	@Test
-	public void getGreetingForTimeMethodReturnsTheSameMessageThatObtainFromFactory(){
+	public void getGreetingForTimeMethodMakesExpectedGreeting(){
 		makeServiceReturnGreeting();
 		
 		Assert.assertEquals(EXPECTED_GREETING, greeting);
+	}
+	
+	@Test
+	public void getGreetingForTimeMethodReturnsNullIfTokenWrong(){		
+		tryToGetGreetingWithWrongToken();
+		
+		Assert.assertNull(greeting);
+	}
+	
+	private void tryToGetGreetingWithWrongToken(){
+		greeting = service.getGreeting(TIME, WRONG_TOKEN);
 	}
 }

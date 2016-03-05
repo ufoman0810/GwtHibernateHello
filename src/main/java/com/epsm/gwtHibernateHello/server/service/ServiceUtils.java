@@ -21,7 +21,7 @@ public class ServiceUtils extends RemoteServiceServlet{
 		
 		UserDTO userDto = getUserDTOfromSession();
 		
-		if(isUserExist(userDto) && isGrantedTokenEqualsToSavedToken(token, userDto)){
+		if(userDto != null && isGrantedTokenEqualsToSaved(token, userDto)){
 			logger.debug("Invoked: isTokenCorrect(...), returned: true.");
 			return true;
 		}else{
@@ -30,13 +30,9 @@ public class ServiceUtils extends RemoteServiceServlet{
 		}
 	}
 	
-	private boolean isUserExist(UserDTO userDto){
-		return userDto != null;
-	}
-	
-	private boolean isGrantedTokenEqualsToSavedToken(String token, UserDTO userDto){
-		boolean equals = token.equals(userDto.getToken());
-		logger.debug("Invoked: isGrantedTokenEqualsToSavedToken(), returned: {}.", equals);
+	private boolean isGrantedTokenEqualsToSaved(String grantedToken, UserDTO userDto){
+		boolean equals = grantedToken.equals(userDto.getToken());
+		logger.debug("Invoked: isGrantedTokenEqualsToSaved(), returned: {}.", equals);
 		
 		return equals;
 	}

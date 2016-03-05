@@ -34,7 +34,6 @@ public class PropertiesExtractor{
 				.getResourceAsStream(Constants.APPLICATION_PROPERTIES);
 		
 		if (inputStream != null) {
-			
 			properties.load(inputStream);
 		} else {
 			String message = String.format("property file: %s not found in the classpath",

@@ -4,8 +4,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +30,15 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	
 	@Override
 	public String getGreeting(String timeAsString, String token) {
-		if(timeAsString == null){
-			logger.warn("Attempt: get greeting with null time from: {}.", getRemoteAddr());
-			return null;
-		}else if(isTokenCorrect(token)){
-			logger.info("Prepearing: greeting for user with login: {}, time: {}, from: {}.",
-					getUserLogin(), timeAsString, getRemoteAddr());
-			return createMessage(timeAsString);
+		if(isTokenCorrect(token)){
+			if(timeAsString == null){
+				logger.warn("Attempt: get greeting with null time from: {}.", getRemoteAddr());
+				return null;
+			}else{
+				logger.info("Prepearing: greeting for user with login: {}, time: {}, from: {}.",
+						getUserLogin(), timeAsString, getRemoteAddr());
+				return createMessage(timeAsString);
+			}
 		}else{
 			logger.warn("Denied: getting greeting with wrong token from: {}.", getRemoteAddr());
 			return null;
@@ -47,7 +47,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	
 	private String createMessage(String timeAsString){
 		StringBuilder builder = new StringBuilder();
-		Locale locale = getRequestLocale();
+		Locale locale = getRequest().getLocale();
 		LocalTime time = LocalTime.parse(timeAsString, formatter);
 		Message	message = messageFactory.getMessage(locale, time);
 		builder.append(message.toLocalizedString());
@@ -58,10 +58,5 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 				timeAsString, locale, builder.toString());
 
 		return builder.toString();
-	}
-	
-	private Locale getRequestLocale(){
-		HttpServletRequest request = getRequest();
-		return request.getLocale();
 	}
 }

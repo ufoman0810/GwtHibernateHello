@@ -17,79 +17,49 @@ import com.epsm.gwtHibernateHello.shared.UserDTO;
 
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends ServiceUtils implements LoginService {
-	private UserDao dao;
-	private ThreadLocal<User> user;
-	private Logger logger;
-	
-	public LoginServiceImpl() {
-		logger = LoggerFactory.getLogger(LoginServiceImpl.class);
-		dao = UserDaoImpl.getInstatnce();
-		user = new ThreadLocal<User>();
-		
-		logger.info("Created: LoginServiceImpl.");
-	}
+	private UserDao dao = UserDaoImpl.getInstatnce();
+	private Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
 	@Override
 	public UserDTO loginServer(String login, String password){
-		logger.info("Invoked: loginServer(login: {}, ...), from: {}.", login, getRemoteAddr());
+		User user = dao.findUserByLogin(login);
 		
-		getUserByLoginFromDB(login);
-		
-		if(isUserExists() && isPasswordCorrect(password)){
+		if(user != null && isGrantedPasswordCorrect(user, password)){
 			logger.info("Logged in: user with login: {}, from: {}.", login, getRemoteAddr());
-			return createUserDTOAndSaveInSession();
+			UserDTO userDto = createLoggedInUserDTO(user);
+			saveUserDTOInSession(userDto);
+			
+			return userDto;
 		}else{
 			logger.info("Access denied: for user with login: {}, from: {}.", login, getRemoteAddr());
 			return createNotLogedInUserDTO();
 		}
 	}
 	
-	private void getUserByLoginFromDB(String login){
-		User retreivedUser = dao.findUserByLogin(login);
-		user.set(retreivedUser);
-		logger.debug("Invoked: getUserByLoginFromDB({}), DB returned user: {}.",
-		login, retreivedUser != null);
-	}
-	
-	private boolean isUserExists(){
-		return user.get() != null;
-	}
-	
-	private boolean isPasswordCorrect(String password){
-		String storedHash = user.get().getPassword();
+	private boolean isGrantedPasswordCorrect(User user, String password){
+		String storedHash = user.getPassword();
 		boolean correct = BCrypt.checkpw(password, storedHash);
 		logger.debug("Invoked: isPasswordCorrect(...), returned: {}.", correct);
 		
 		return correct;
 	}
 	
-	private UserDTO createUserDTOAndSaveInSession(){
-		UserDTO userDto = createLoggedInUserDTO();
-		saveUserDTOInSession(userDto);
-		
-		return userDto;
-	}
-	
-	private UserDTO createLoggedInUserDTO(){
+	private UserDTO createLoggedInUserDTO(User user){
 		UserDTO dto = new UserDTO();
-		dto.setLogin(user.get().getLogin());
-		dto.setName(user.get().getName());
-		dto.setToken(generateToken());
+		dto.setLogin(user.getLogin());
+		dto.setName(user.getName());
+		dto.setToken(UUID.randomUUID().toString());
 		dto.setLoggedIn(true);
 		logger.debug("Invoked: createLoggedInUserDTO(), returned: {}.", dto);
 		
 		return dto;
 	}
 	
-	private String generateToken(){
-		return UUID.randomUUID().toString();
-	}
-	
 	private void saveUserDTOInSession(UserDTO userDto){
 		HttpServletRequest request = getRequest();
 		HttpSession session = request.getSession();
 		session.setAttribute("user", userDto);
-		logger.debug("Invoked: saveUserDTOInSession(...) for user with login: {}.", user.get().getLogin());
+		logger.debug("Invoked: saveUserDTOInSession(...) for user with login: {}.", userDto.getLogin());
 	}
 	
 	private UserDTO createNotLogedInUserDTO(){
@@ -108,8 +78,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		logger.info("Invoked: isSessionStillLegal(...), from: {}.", getRemoteAddr());
 
 		if(isTokenCorrect(token)){
-			logger.info("Session restored: for user with login: {}, from: {}.",
-					getUserLogin(), getRemoteAddr());
+			logger.info("Session restored: for user with login: {}, from: {}.",	getUserLogin(), getRemoteAddr());
 			return getUserDTOfromSession();
 		}else{
 			logger.info("Session restoring denied: for user from: {}.", getRemoteAddr());
@@ -122,11 +91,10 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		logger.info("Invoked: logout(...) from: {}.", getRemoteAddr());
 		
 		if(isTokenCorrect(token)){
-			logger.info("Logged out: user with login: {}, from: {}.",	
-					getUserLogin(), getRemoteAddr());
+			logger.info("Logged out: user with login: {}, from: {}.", getUserLogin(), getRemoteAddr());
 			deleteUserDTOFromSession();
 		}else{
-			logger.warn("Denied: logging out fo user with wrong token from: {}.", getRemoteAddr());
+			logger.warn("Denied: logging out for user with wrong token from: {}.", getRemoteAddr());
 		}
 	}
 	
@@ -134,6 +102,6 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		HttpServletRequest request = getRequest();
 		HttpSession session = request.getSession();
 		session.removeAttribute("user");
-		logger.debug("Invoked: deleteUserDTOFromSession().");
+		logger.debug("Executed: deleteUserDTOFromSession().");
 	}
 }
