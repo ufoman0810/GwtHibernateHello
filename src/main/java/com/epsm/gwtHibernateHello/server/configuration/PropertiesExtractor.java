@@ -36,7 +36,7 @@ public class PropertiesExtractor{
 		if (inputStream != null) {
 			properties.load(inputStream);
 		} else {
-			String message = String.format("property file: %s not found in the classpath",
+			String message = String.format("Error: property file %s not found in the classpath",
 					Constants.APPLICATION_PROPERTIES);
 			throw new FileNotFoundException(message);
 		}
@@ -52,7 +52,7 @@ public class PropertiesExtractor{
 			throw new RuntimeException(message);
 		}
 		
-		logger.debug("Invoked: getPropertyFromProperties({}), returned: {}.", propertyName, property);
+		logger.debug("Executed: getPropertyFromProperties({}), returned: {}.", propertyName, property);
 		
 		return property;
 	}

@@ -53,6 +53,7 @@ public class AppController {
 		this.greetingPresenter = greetingPresenter;
 		container = ContentContainer.getInstance();
 		bindEventBus();
+		logger.config("AppController created.");
 	}
 	
 	private void bindEventBus(){
@@ -77,14 +78,16 @@ public class AppController {
 	
 	private void displayGreeting(){
 		greetingPresenter.showPage(container);
+		logger.finer("Displayed: Greeting content.");
 	}
 	
 	private void displayLogin(){
 		loginPresenter.showPage(container);
+		logger.finer("Displayed: Login content.");
 	}
 	
 	public void showPage(){ 
-		logger.fine("Requested: GwtHibernateHello module.");
+		logger.fine("Invoked: showPage().");
 		
 		String token = Cookies.getCookie(Constants.COOKIE_TOKEN);
 		
@@ -97,13 +100,15 @@ public class AppController {
 	
 	private void checkWithServerIsSessionStillLegal(String token){		
 		loginService.isSessionStillLegal(token, new SessionLegalityRequest());
+		logger.finer("Requested: isSessionStillLegal(...) from a LoginService.");
 	}
 	
 	private class SessionLegalityRequest implements AsyncCallback<UserDTO>{
 
 		@Override
 		public void onSuccess(UserDTO result) {
-			logger.finer("Invoked: loginserver.isTokenStillLegal(), returned '" + result + "'." );
+			logger.finer("Executed: isSessionStillLegal(..) request to a LoginService. Got: " + result + ".");
+			
 			if(result.isLoggedIn()){
 				displayGreeting();
 			}else{
@@ -113,7 +118,7 @@ public class AppController {
 		
 		@Override
 		public void onFailure(Throwable caught) {
-			logger.warning("Invoked: loginserver.isTokenStillLegal(), server unavaible.");
+			logger.finer("Failed: isSessionStillLegal(..) request to a LoginService.");
 			displayLogin();
 		}
 	}

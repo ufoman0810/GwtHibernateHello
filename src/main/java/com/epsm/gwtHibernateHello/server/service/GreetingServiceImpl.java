@@ -32,7 +32,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	public String getGreeting(String timeAsString, String token) {
 		if(isTokenCorrect(token)){
 			if(timeAsString == null){
-				logger.warn("Attempt: get greeting with null time from: {}.", getRemoteAddr());
+				logger.warn("Attempt: get greeting with null timeAsString from: {}.", getRemoteAddr());
 				return null;
 			}else{
 				logger.info("Prepearing: greeting for user with login: {}, time: {}, from: {}.",
@@ -54,7 +54,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 		builder.append(", ");
 		builder.append(getUserDTOfromSession().getName());
 		builder.append(".");
-		logger.debug("Invoked: createMessage(...) for timeAsString: {}, Locale: {}, returned: {}",
+		logger.debug("Executed: createMessage(...) for timeAsString: {}, Locale: {}, returned: {}",
 				timeAsString, locale, builder.toString());
 
 		return builder.toString();

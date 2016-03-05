@@ -31,11 +31,12 @@ public class GreetingPresenter extends Presenter{
 
 		this.greetingService = greetingService;
 		formatter = DateTimeFormat.getFormat(Constants.TIME_PATTERN);
-		logger.config("PagePresenter created.");
+		logger.config("GreetingPresenter created.");
 	}
 	
 	@Override
 	public void showPage(ContentContainer container) {
+		logger.finest("Invoked: showPage(...).");
 		view.resetState();
 		container.setContent(view.asComposite());
 		tryToGetGreetingFromGreetingServer();
@@ -45,42 +46,48 @@ public class GreetingPresenter extends Presenter{
 		Date timeSource = new Date();
 		String token = Cookies.getCookie(Constants.COOKIE_TOKEN);
 		String timeAsString = formatter.format(timeSource);
-		greetingService.getGreeting(timeAsString, token, new GetGreetingRequest());
-		logger.finer("Invoked: greetingService.GetGreetingRequest(" + timeAsString + ",...).");
+		greetingService.getGreeting(timeAsString, token, new GreetingRequest());
+		logger.finer("Requested: getGreeting(" + timeAsString + ",...) to a GreetingService.");
 	}
 	
-	private class GetGreetingRequest implements AsyncCallback<String>{
+	private class GreetingRequest implements AsyncCallback<String>{
 		
 		@Override
 		public void onSuccess(String result) {
-			logger.finer("Invoked: greetingService.getGreetingForTime(...), returned '" + result + "'.");
 			((GreetingView) view).displayGreeting(result);
+			logger.finer("Executed: getGreeting(..) request to a GreetingService. Displayed greeting: "
+					+ result);
 		}
 		
 		@Override
 		public void onFailure(Throwable caught) {
-			logger.warning("Invoked: greetingService.getGreetingForTime(...), server unavaible.");
-			view.displayError(messages.serverUnavaible());
+			String message = messages.serverUnavaible();
+			view.displayError(message);
+			logger.warning("Failed: getGreeting(..) request to a GreetingService. Displayed: " 
+					+ message);
 		}
 	}
 	
 	public void executeLogout(){	
 		String token = Cookies.getCookie(Constants.COOKIE_TOKEN);
 		loginService.logout(token, new LogoutRequest());
+		logger.finer("Requested: executeLogout() to a LoginService.");
 	}
 	
 	private class LogoutRequest implements AsyncCallback<Void>{
 
 		@Override
 		public void onSuccess(Void result) {
-			logger.info("Invoked: loginService.logout(...), request executed.");
 			eventBus.fireEvent(new LogoutEvent());
+			logger.finer("Executed: executeLogout() request to LoginService. LogoutEvent fired.");
 		}
 
 		@Override
 		public void onFailure(Throwable caught) {
-			logger.warning("Invoked: loginService.logout(...), server unavaible.");
-			view.displayError(messages.serverUnavaible());
+			String message = messages.serverUnavaible();
+			view.displayError(message);
+			logger.finer("Failed: executeLogout() request to LoginService. Displayed message: "
+					+ message + ".");
 		}
 	}
 }

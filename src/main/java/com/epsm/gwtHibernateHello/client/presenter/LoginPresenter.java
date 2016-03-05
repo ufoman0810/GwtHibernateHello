@@ -29,7 +29,7 @@ public class LoginPresenter extends Presenter{
 	}	
 	
 	public void logIn(String login, String password){
-		logger.finest("Invoked: showPage(" + login + ", " + password + ").");
+		logger.finer("Invoked: logIn(" + login + ", ...)");
 		
 		if(areLoginOrPasswordTooShort(login, password)){
 			showLoginOrPasswordTooShortMessage();
@@ -46,19 +46,19 @@ public class LoginPresenter extends Presenter{
 	private void showLoginOrPasswordTooShortMessage(){
 		String message = messages.tooShortLoginOrPassword(Constants.MINIMAL_LENGHT);
 		view.displayError(message);
-		logger.finer("Displayed: message on login filling '" + message + "'.");
+		logger.finer("Displayed: message: " + message + ".");
 	}
 	
 	private void tryToLoginWithServer(String login, String password){		
-		logger.finer("tryToLoginWithServer(), loginService: " + loginService + "'.");
 		loginService.loginServer(login, password,  new loginWithServerRequest());
+		logger.finer("Requested: loginServer(" + login + ", ...) to LoginServer.");
 	}
 	
 	private class loginWithServerRequest implements AsyncCallback<UserDTO>{
 		
 		@Override
 		public void onSuccess(UserDTO result) {
-			logger.finer("Invoked: loginService.loginServer(...), returned '" + result + "'." );
+			logger.finer("Executed: loginServer(..) request to a LoginService. Got: " + result + ".");
 			
 			if(result.isLoggedIn()){
 				refreshCookies(result);
@@ -71,7 +71,7 @@ public class LoginPresenter extends Presenter{
 		@Override
 		public void onFailure(Throwable caught) {
 			displayServerUnvaibleMessage();
-			logger.warning("Invoked: loginService.loginServer(...), server unavaible.");
+			logger.finer("Failed: loginServer(..) request to a LoginService.");
 		}
 	}
 	
@@ -84,17 +84,18 @@ public class LoginPresenter extends Presenter{
 	
 	private void reportLoginSuccessful(){
 		eventBus.fireEvent(new LoginEvent());
+		logger.finer("Executed: LoginEvent fired.");
 	}
 	
 	private void displayWrongLoginOrPasswordMessage(){
 		String message = messages.wrongLoginOrPassword();
 		view.displayError(message);
-		logger.finer("Displayed: message on login '" + message + "'.");
+		logger.finer("Displayed: message: " + message + ".");
 	}
 	
 	private void displayServerUnvaibleMessage(){
 		String message = messages.serverUnavaible();
 		view.displayError(message);
-		logger.finer("Displayed: message on login '" + message + "'.");
+		logger.finer("Displayed: message: " + message + ".");
 	}
 }

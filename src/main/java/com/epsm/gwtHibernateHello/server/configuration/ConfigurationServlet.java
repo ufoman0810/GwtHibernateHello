@@ -21,7 +21,7 @@ public class ConfigurationServlet extends HttpServlet{
 		try{
 			fillDatabaseFromScript();
 		}catch(IOException e){
-			logger.error("Error: while filling database from script.", e);
+			logger.error("Error: while filling database from script file.", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -32,6 +32,6 @@ public class ConfigurationServlet extends HttpServlet{
 		byte[] scriptAsBytes = Files.readAllBytes(Paths.get(path));
 		String script = new  String(scriptAsBytes, Charset.forName("UTF-8"));
 		sqlExecuter.executeNativeSQL(script);
-		logger.info("Filled: database from {}.", path);
+		logger.info("Executed: fillDatabaseFromScript(), database filled from: {} file.", path);
 	}
 }

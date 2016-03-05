@@ -14,7 +14,7 @@ import com.epsm.gwtHibernateHello.server.domain.User;
 public class UserDaoImpl implements UserDao{
 	private static UserDao usedDao;
 	private SessionFactory factory = SessionFactorySource.getSessionFactory();
-	private Logger logger = LoggerFactory.getLogger(SessionFactorySource.class);
+	private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 	
 	private UserDaoImpl(){
 	}
@@ -22,6 +22,7 @@ public class UserDaoImpl implements UserDao{
 	public static synchronized UserDao getInstatnce(){
 		if(usedDao == null){
 			usedDao = new UserDaoImpl();
+			logger.info("Created: UserDaoImpl.");
 		}
 		
 		return usedDao;
@@ -47,7 +48,7 @@ public class UserDaoImpl implements UserDao{
 			session.close(); 
 		}
 		
-		logger.debug("Invoked: findUserByLogin({}), returned {}.", login, user);
+		logger.debug("Executed: findUserByLogin({}), returned: {}.", login, user);
 		
 		return user;
 	}

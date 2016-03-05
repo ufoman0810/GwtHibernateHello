@@ -39,7 +39,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 	private boolean isGrantedPasswordCorrect(User user, String password){
 		String storedHash = user.getPassword();
 		boolean correct = BCrypt.checkpw(password, storedHash);
-		logger.debug("Invoked: isPasswordCorrect(...), returned: {}.", correct);
+		logger.debug("Executed: isPasswordCorrect(...), returned: {}.", correct);
 		
 		return correct;
 	}
@@ -50,7 +50,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		dto.setName(user.getName());
 		dto.setToken(UUID.randomUUID().toString());
 		dto.setLoggedIn(true);
-		logger.debug("Invoked: createLoggedInUserDTO(), returned: {}.", dto);
+		logger.debug("Executed: createLoggedInUserDTO(), returned: {}.", dto);
 		
 		return dto;
 	}
@@ -59,7 +59,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		HttpServletRequest request = getRequest();
 		HttpSession session = request.getSession();
 		session.setAttribute("user", userDto);
-		logger.debug("Invoked: saveUserDTOInSession(...) for user with login: {}.", userDto.getLogin());
+		logger.debug("Executed: saveUserDTOInSession(...) for user with login: {}.", userDto.getLogin());
 	}
 	
 	private UserDTO createNotLogedInUserDTO(){
@@ -68,7 +68,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 		dto.setName("");
 		dto.setToken("");
 		dto.setLoggedIn(false);
-		logger.debug("Invoked: createNotLogedInUserDTO(), returned: {}.", dto);
+		logger.debug("Executed: createNotLogedInUserDTO(), returned: {}.", dto);
 		
 		return dto;
 	}

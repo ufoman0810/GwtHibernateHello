@@ -15,24 +15,24 @@ public class ServiceUtils extends RemoteServiceServlet{
 	
 	protected boolean isTokenCorrect(String token){
 		if(token == null){
-			logger.debug("Invoked: isTokenCorrect(...), returned: false, token is null.");
+			logger.debug("Executed: isTokenCorrect(...), returned: false, token is null.");
 			return false;
 		}
 		
 		UserDTO userDto = getUserDTOfromSession();
 		
 		if(userDto != null && isGrantedTokenEqualsToSaved(token, userDto)){
-			logger.debug("Invoked: isTokenCorrect(...), returned: true.");
+			logger.debug("Executed: isTokenCorrect(...), returned: true.");
 			return true;
 		}else{
-			logger.debug("Invoked: isTokenCorrect(...), returned: false.");
+			logger.debug("Executed: isTokenCorrect(...), returned: false.");
 			return false;
 		}
 	}
 	
 	private boolean isGrantedTokenEqualsToSaved(String grantedToken, UserDTO userDto){
 		boolean equals = grantedToken.equals(userDto.getToken());
-		logger.debug("Invoked: isGrantedTokenEqualsToSaved(), returned: {}.", equals);
+		logger.debug("Executed: isGrantedTokenEqualsToSaved(), returned: {}.", equals);
 		
 		return equals;
 	}
@@ -47,7 +47,7 @@ public class ServiceUtils extends RemoteServiceServlet{
 			userDto = (UserDTO) userObject;
 		}
 		
-		logger.debug("Invoked: getUserDTOfromSession(), returned: {}.", userDto);
+		logger.debug("Executed: getUserDTOfromSession(), returned: {}.", userDto);
 		
 		return userDto;
 	}
