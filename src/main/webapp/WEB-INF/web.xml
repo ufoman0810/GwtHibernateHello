@@ -12,6 +12,11 @@
 		<servlet-name>greetingServlet</servlet-name>
 		<servlet-class>com.epsm.gwtHibernateHello.server.service.GreetingServiceImpl</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>configServlet</servlet-name>
+		<servlet-class>com.epsm.gwtHibernateHello.server.configuration.ConfigurationServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>loginServlet</servlet-name>
