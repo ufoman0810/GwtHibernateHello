@@ -1,0 +1,3 @@
+<dataset>
+	<user id="1" login="someUser" name="someName" password="someHash" />
+</dataset>

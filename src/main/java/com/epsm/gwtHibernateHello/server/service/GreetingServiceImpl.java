@@ -10,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.gwtHibernateHello.client.service.GreetingService;
-import com.epsm.gwtHibernateHello.server.configuration.Configuration;
+import com.epsm.gwtHibernateHello.server.configuration.PropertiesExtractor;
 import com.epsm.gwtHibernateHello.shared.Constants;
+import com.epsm.hello.configutation.Configurator;
 import com.epsm.hello.model.Message;
 import com.epsm.hello.model.MessageFactory;
 
@@ -23,7 +24,8 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 	
 	public GreetingServiceImpl(){
 		logger = LoggerFactory.getLogger(GreetingServiceImpl.class);
-		messageFactory = Configuration.getMesageFactory();
+		String pathToLocalizations = PropertiesExtractor.getProperty(Constants.LOCALIZATIONS_PATH); 
+		messageFactory = Configurator.getConfiguredFactory(pathToLocalizations);
 		formatter = DateTimeFormatter.ofPattern(Constants.TIME_PATTERN);
 		logger.info("Created: GreetingServiceImpl.");
 	}
@@ -52,7 +54,7 @@ public class GreetingServiceImpl extends ServiceUtils implements GreetingService
 		builder.append(", ");
 		builder.append(getUserDTOfromSession().getName());
 		builder.append(".");
-		logger.debug("Invoked: createMessage(...) for timeAsString: {}, Locale: {}, returned: {}.",
+		logger.debug("Invoked: createMessage(...) for timeAsString: {}, Locale: {}, returned: {}",
 				timeAsString, locale, builder.toString());
 
 		return builder.toString();

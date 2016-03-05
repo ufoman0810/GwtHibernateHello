@@ -4,5 +4,4 @@ import com.epsm.gwtHibernateHello.server.domain.User;
 
 public interface UserDao {
 	User findUserByLogin(String login);
-	void executeNativeSQL(String script);
 }

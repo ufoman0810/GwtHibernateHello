@@ -4,13 +4,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class ContentContainer {
-	private static ContentContainer container;
+	private static ContentContainer container = new ContentContainer();
 	
 	private ContentContainer(){
-	}
-	
-	static{
-		container = new ContentContainer();
 	}
 	
 	public static ContentContainer getInstance(){

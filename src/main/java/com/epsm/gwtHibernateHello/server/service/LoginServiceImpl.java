@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.gwtHibernateHello.client.service.LoginService;
-import com.epsm.gwtHibernateHello.server.configuration.Configuration;
 import com.epsm.gwtHibernateHello.server.domain.User;
 import com.epsm.gwtHibernateHello.server.repository.UserDao;
+import com.epsm.gwtHibernateHello.server.repository.UserDaoImpl;
 import com.epsm.gwtHibernateHello.shared.UserDTO;
 
 @SuppressWarnings("serial")
@@ -23,7 +23,7 @@ public class LoginServiceImpl extends ServiceUtils implements LoginService {
 	
 	public LoginServiceImpl() {
 		logger = LoggerFactory.getLogger(LoginServiceImpl.class);
-		dao = Configuration.getUsedDao();
+		dao = UserDaoImpl.getInstatnce();
 		user = new ThreadLocal<User>();
 		
 		logger.info("Created: LoginServiceImpl.");
