@@ -2,37 +2,21 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 350px;
-	float: left;
-	margin-left: -170px;
-	margin-top: -40px;
+	margin-left: -150px;
+	display: table;
 }
 
-.errorsContainer{
-	float: left;
-	width: 350px;
-}
-
-.errorLabel{
+.error{
+	display: table-caption;
 	color: red;
 	text-align: center;
 }
 
-.inputContainer{
-	width: 350px;
+.row{
+	display: table-row;
 }
 
-.labelsContainer{
-	margin-right: 10px;
-	float: left;
-}
-
-.label{
-	text-align: left;
-	margin-top: 7px;
-}
-
-.fields{
-	width: 200px;
-	float: left;
+.cell{
+	display: table-cell;
+	padding: 1px;
 }

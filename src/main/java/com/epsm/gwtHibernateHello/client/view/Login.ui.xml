@@ -8,21 +8,32 @@
 
 	<gwt:HTMLPanel>
 		<div class="{style.login}">
-			<div class="{style.errorsContainer">
-				<gwt:Label ui:field="errorLabel" resources:styleName="{style.errorLabel}"/>
+			<div class="{style.error}">
+				<gwt:Label ui:field="errorLabel"/>
 			</div>
-			<div class="{style.inputContainer}">
-				<div class="{style.labelsContainer}">
-					<gwt:Label resources:styleName="{style.label}">
+			<div class="{style.row}">
+				<div class="{style.cell}">
+					<gwt:Label>
 						<ui:msg description="loginLabel">Login:</ui:msg>
 					</gwt:Label>
-					<gwt:Label resources:styleName="{style.label}">
+				</div>
+				<div class="{style.cell}">     
+					<gwt:TextBox ui:field="loginBox"/>
+				</div>
+			</div>	
+			<div class="{style.row}">	
+				<div class="{style.cell}">
+					<gwt:Label>
 						<ui:msg description="passwordLabel">Password:</ui:msg>
 					</gwt:Label>
-				</div>     
-				<div class="{style.fields}">     
-					<gwt:TextBox ui:field="loginBox"/>
+				</div>
+				<div class="{style.cell}"> 
 					<gwt:PasswordTextBox ui:field="passwordBox"/>
+				</div>
+			</div>
+			<div class="{style.row}">
+			    <div class="{style.cell}"></div>
+			    <div class="{style.cell}">
 					<gwt:Button ui:field="buttonLogin">
 						<ui:msg description="ButtonLogin">Log in</ui:msg>
 					</gwt:Button>
